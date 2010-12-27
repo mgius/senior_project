@@ -1,4 +1,8 @@
 # Dependencies
+
+## Python
+I developed using Python 2.6.  Other versions may or may not work.
+
 ## PyGame
 This project depends on PyGame 1.9.1.  As of 2010-12-27, Debian does
 not contain a new enough version of PyGame (although Ubuntu does).
