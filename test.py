@@ -9,7 +9,7 @@ from character.character import Character
 from shared.direction import Direction
 pygame.init()
 
-size = width, height = 640, 480
+size = width, height = 640, 640
 black = 0, 0, 0
 white = 255, 255, 255
 fps = 30
@@ -23,47 +23,52 @@ def processEvents():
       #print event
       if event.type == QUIT:
          sys.exit(0)
-      elif event.type == KEYDOWN and event.key == K_ESCAPE:
-         sys.exit(0)
-      elif event.type == KEYDOWN and event.key == K_q:
-         sys.exit(0)
-      elif event.type == KEYDOWN and event.key == K_UP:
-         man.startWalking(Direction.BACK)
-         processEvents.downCount += 1
-      elif event.type == KEYDOWN and event.key == K_LEFT:
-         man.startWalking(Direction.LEFT)
-         processEvents.downCount += 1
-      elif event.type == KEYDOWN and event.key == K_RIGHT:
-         man.startWalking(Direction.RIGHT)
-         processEvents.downCount += 1
-      elif event.type == KEYDOWN and event.key == K_DOWN:
-         man.startWalking(Direction.FRONT)
-         processEvents.downCount += 1
-      elif event.type == KEYDOWN and event.key == K_d:
-         man.die()
-      elif event.type == KEYDOWN and event.key == K_u:
-         man.revive()
-      elif event.type == KEYDOWN and event.key == K_a:
-         man.startAttack()
+      elif event.type == KEYDOWN:
+         if event.key == K_ESCAPE:
+            sys.exit(0)
+         elif event.key == K_q:
+            sys.exit(0)
+         elif event.key == K_UP:
+            man.startWalking(Direction.BACK)
+         #   processEvents.downCount += 1
+         elif event.key == K_LEFT:
+            man.startWalking(Direction.LEFT)
+         #   processEvents.downCount += 1
+         elif event.key == K_RIGHT:
+            man.startWalking(Direction.RIGHT)
+         #   processEvents.downCount += 1
+         elif event.key == K_DOWN:
+            man.startWalking(Direction.FRONT)
+         #   processEvents.downCount += 1
+         elif event.key == K_d:
+            man._die()
+         elif event.key == K_u:
+            man._revive()
+         elif event.key == K_a:
+            man.startAttack()
 
-      elif event.type == KEYUP and (event.key == K_UP or 
-            event.key == K_LEFT or
-            event.key == K_RIGHT or
-            event.key == K_DOWN):
-         processEvents.downCount -= 1
+      elif event.type == KEYUP:
+         if event.key == K_UP:
+            man.stopWalking(Direction.BACK)
+         elif event.key == K_LEFT:
+            man.stopWalking(Direction.LEFT)
+         elif event.key == K_RIGHT:
+            man.stopWalking(Direction.RIGHT)
+         elif event.key == K_DOWN:
+            man.stopWalking(Direction.FRONT)
          # Avoids issue where fast typist can strike down before releasing previous
          # key
-         if processEvents.downCount <= 0:
-            man.stopWalking()
+         #if processEvents.downCount <= 0:
+         #   man.stopWalking()
 
 man = Character(center=screen.get_rect().center)
+print man.rect.center
 
 clock = pygame.time.Clock()
 character = pygame.sprite.RenderUpdates((man))
 walls = pygame.sprite.RenderPlain()
 
-
-processEvents.downCount = 0
+#processEvents.downCount = 0
 
 # may want to optimize this
 def fill_background(surf, background):

@@ -2,6 +2,7 @@
 import settings
 import pygame
 
+from collections import deque
 from itertools import cycle
 
 from shared.direction import Direction
@@ -46,34 +47,52 @@ class Character(pygame.sprite.Sprite):
       self.speed = [0,0]
       self.walkingRate = settings.fps / 4 # frames between steps
       self.walkingCount = self.walkingRate # frames until next step
+      self.directionQueue = deque()
+      self.directionBitSet = 0
       self.curDirection = None
       self.isWalking = False
       self.isDead = False
       self.isAttacking = False
 
-      self.curAnim = self.lfWalk
-      self.image = self.curAnim.next()
+      self.curAnim = None
+      self.image = self.battleStance
       self.rect = self.image.get_rect()
       if center is not None:
          self.rect.center = center
 
-   def startWalking(self, newdirection):
+   def startWalking(self, direction):
       if self.isDead:
          return
-      self.isWalking = True
-      if self.curDirection == newdirection:
+      # somebody spamming a direction key, the jerk
+      if self.curDirection == direction:
          return
-      self.curDirection = newdirection
-      if newdirection == Direction.LEFT:
+      # we best be walking now
+      self.isWalking = True
+
+      # OR in the new direction
+      self.directionBitSet |= direction
+      # and add it to the queue of directions
+      self.directionQueue.append(direction)
+
+   def stopWalking(self, direction):
+      self.directionBitSet &= ~direction
+      # should probably reset to a standing pose...hmm....
+      # probably will be handled by block based moving, assuming I time the
+      # animation correctly
+
+   def _setwalkingdirection(self, direction):
+      self.curDirection = direction
+      print "DEBUG: direction: %d" % direction
+      if direction == Direction.LEFT:
          self.curAnim = self.lfWalk
          self.speed = [-4, 0]
-      elif newdirection == Direction.FRONT:
+      elif direction == Direction.FRONT:
          self.curAnim = self.frWalk
          self.speed = [0, 4]
-      elif newdirection == Direction.RIGHT:
+      elif direction == Direction.RIGHT:
          self.curAnim = self.rtWalk
          self.speed = [4, 0]
-      elif newdirection == Direction.BACK:
+      elif direction == Direction.BACK:
          self.curAnim = self.bkWalk
          self.speed = [0, -4]
 
@@ -81,32 +100,53 @@ class Character(pygame.sprite.Sprite):
       # Force a frame update
       self.walkingCount = self.walkingRate
 
-   def stopWalking(self):
-      self.isWalking = False;
-      # should probably reset to a standing pose...hmm....
-
-   def walk(self):
+   def _walkingAnimation(self):
       self.rect.move_ip(self.speed)
+      print "Speed: %s" % self.speed
+      print "Current Location: %d, %d\n" % self.rect.center
+
       if self.walkingCount >= self.walkingRate:
          self.walkingCount = 0
          self.image = self.curAnim.next()
       else:
          self.walkingCount += 1
 
+
+   def _walk(self):
+      print "DEBUG: Character center: %d, %d" % self.rect.center
+      if self.isWalking and not (self.rect.centerx % 32) and not (self.rect.centery % 32):
+         if self.directionBitSet == 0:
+            # empty out the direction queue and stop walking
+            self.isWalking = False
+            self.directionQueue.clear()
+            self.curDirection = None
+            return
+         elif self.curDirection == None or (self.directionBitSet & self.curDirection) == 0:
+            # current direction has been lifted
+            while len(self.directionQueue) != 0:
+               direction = self.directionQueue.popleft()
+               if (direction & self.directionBitSet) != 0:
+                  self._setwalkingdirection(direction)
+                  break;
+      # finally, trigger the walking animation
+      print "DEBUG: About to animate\n"
+      self._walkingAnimation()
+
+
    def update(self):
       if self.isDead:
          return
       if self.isAttacking:
-         self.attack()
+         self._attack()
       if self.isWalking:
-         self.walk()
+         self._walk()
 
-   def die(self):
+   def _die(self):
       self.isDead = True
       self.image = self.deadStance
       self.curDirection = None
 
-   def revive(self):
+   def _revive(self):
       self.isDead = False
       self.image = self.battleStance
       self.curDirection = None
@@ -117,7 +157,7 @@ class Character(pygame.sprite.Sprite):
          self.isAttacking = True
          self.image = self.battleStance
 
-   def attack(self):
+   def _attack(self):
       if self.attackFramesLeft > (settings.fps / 6):
          self.rect.move_ip((-1, 0))
       elif self.attackFramesLeft > 0:
