@@ -1,7 +1,12 @@
-import sys, pygame, time, os
-import math
-from itertools import cycle
+import settings
+
+import sys, pygame, time, os, math
 from pygame.locals import *
+from shared.load import load_sprite, load_tile
+
+from character.character import Character
+
+from shared.direction import Direction
 pygame.init()
 
 size = width, height = 640, 480
@@ -11,138 +16,7 @@ fps = 30
 
 screen = pygame.display.set_mode(size)
 
-mediadir = 'media'
-spritedir = os.path.join(mediadir, 'sprites')
-tilesdir = os.path.join(mediadir, 'tiles')
-
-background = pygame.image.load(os.path.join(tilesdir, 'green_grey.gif')).convert()
-
-def readWalkingAnimation(name):
-   walk = []
-   walk.append(
-         pygame.image.load(os.path.join(spritedir, name + '1.gif')).convert())
-   walk.append(
-         pygame.image.load(os.path.join(spritedir, name + '2.gif')).convert())
-   walk = cycle(walk)
-   return walk
-
-def readWalkingAnimations(name):
-   ''' Reads in a series of gifs as a walking animation 
-       returns a 4-tuple of left, front, right, back, each
-       implemented as a cycle of each walking animation
-
-       TODO: Reimplement cycle so that I can restart the animation?
-   '''
-
-   lfWalk = readWalkingAnimation(name + '_lf')
-   frWalk = readWalkingAnimation(name + '_fr')
-   rtWalk = readWalkingAnimation(name + '_rt')
-   bkWalk = readWalkingAnimation(name + '_bk')
-   
-   return (lfWalk, frWalk, rtWalk, bkWalk)
-
-class Direction():
-   ''' Python lacks a java-style enum, leading to this...'''
-   LEFT = 0
-   FRONT = 1
-   RIGHT = 2
-   BACK = 3
-
-class Character(pygame.sprite.Sprite):
-   def __init__(self, center = None):
-      pygame.sprite.Sprite.__init__(self)
-      (self.lfWalk, self.frWalk,
-       self.rtWalk, self.bkWalk) = readWalkingAnimations('ftr1')
-      self.battleStance = pygame.image.load(os.path.join(spritedir,
-         'ftr1_battle.gif')).convert()
-      self.deadStance = pygame.image.load(os.path.join(spritedir,
-         'ftr1_dead.gif')).convert()
-
-      self.speed = [-4,0]
-      self.walkingRate = fps / 4 # frames between steps
-      self.walkingCount = self.walkingRate # frames until next step
-      self.curDirection = Direction.LEFT
-      self.isWalking = False
-      self.isDead = False
-      self.isAttacking = False
-
-      self.curAnim = self.lfWalk
-      self.image = self.curAnim.next()
-      self.rect = self.image.get_rect()
-      self.rect.center = (self.rect.w/2, self.rect.h/2) if center is None else center
-
-   def startWalking(self, newdirection):
-      if self.isDead:
-         return
-      self.isWalking = True
-      if self.curDirection == newdirection:
-         return
-      self.curDirection = newdirection
-      if newdirection == Direction.LEFT:
-         self.curAnim = self.lfWalk
-         self.speed = [-4, 0]
-      elif newdirection == Direction.FRONT:
-         self.curAnim = self.frWalk
-         self.speed = [0, 4]
-      elif newdirection == Direction.RIGHT:
-         self.curAnim = self.rtWalk
-         self.speed = [4, 0]
-      elif newdirection == Direction.BACK:
-         self.curAnim = self.bkWalk
-         self.speed = [0, -4]
-
-      self.image = self.curAnim.next()
-      # Force a frame update
-      self.walkingCount = self.walkingRate
-
-   def stopWalking(self):
-      self.isWalking = False;
-      # should probably reset to a standing pose...hmm....
-
-   def walk(self):
-      self.rect.move_ip(self.speed)
-      if self.walkingCount >= self.walkingRate:
-         self.walkingCount = 0
-         self.image = self.curAnim.next()
-      else:
-         self.walkingCount += 1
-
-   def update(self):
-      if self.isDead:
-         return
-      if self.isAttacking:
-         self.attack()
-      if self.isWalking:
-         self.walk()
-
-   def die(self):
-      self.isDead = True
-      self.image = self.deadStance
-      self.curDirection = None
-
-   def revive(self):
-      self.isDead = False
-      self.image = self.battleStance
-      self.curDirection = None
-
-   def startAttack(self):
-      if not self.isAttacking:
-         self.attackFramesLeft = fps / 3
-         self.isAttacking = True
-         self.image = self.battleStance
-
-   def attack(self):
-      if self.attackFramesLeft > (fps / 6):
-         self.rect.move_ip((-1, 0))
-      elif self.attackFramesLeft > 0:
-         self.rect.move_ip((1, 0))
-      elif self.attackFramesLeft <= 0:
-         self.isAttacking = False
-         print "Final location: %d, %d\n" % (self.rect.center)
-      self.attackFramesLeft -= 1
-
-
-
+background = load_tile('green_grey.gif')
 
 def processEvents():
    for event in pygame.event.get():
