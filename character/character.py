@@ -45,7 +45,7 @@ class Character(pygame.sprite.Sprite):
       self.deadStance = load_sprite(spritename + '_dead.gif', -1)
 
       self.speed = [0,0]
-      self.walkingRate = settings.fps / 4 # frames between steps
+      self.walkingRate = settings.fps / 10 # frames between steps
       self.walkingCount = self.walkingRate # frames until next step
       self.directionQueue = deque()
       self.directionBitSet = 0
