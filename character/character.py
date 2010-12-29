@@ -4,20 +4,20 @@ import pygame
 
 from collections import deque
 from itertools import cycle
+from glob import iglob
 
 from shared.direction import Direction
-from shared.load import load_sprite
+from shared.load import load_sprites_glob, load_sprite
 
 def readWalkingAnimation(name):
    ''' Reads in a two-piece walking animation from the sprite dir,
        and places the animation in a cyclical data structure so that
        it can be iterated over infinitely
-       TODO: Modify to support animations of any length
        TODO: Support restarting the animation?  may have to reimplement cycle
    '''
    walk = []
-   walk.append(load_sprite(name + '1.gif', -1))
-   walk.append(load_sprite(name + '2.gif', -1))
+   for sprite in load_sprites_glob(name + '*.gif'):
+      walk.append(sprite)
    walk = cycle(walk)
 
    return walk

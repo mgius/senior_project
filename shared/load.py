@@ -1,9 +1,15 @@
 from os import path
+from glob import iglob
+
 import pygame
 
 mediadir = 'media'
 spritedir = path.join(mediadir, 'sprites')
 tilesdir = path.join(mediadir, 'tiles')
+
+def load_sprites_glob(fileglob, colorkey=None):
+   for filename in iglob(path.join(spritedir, fileglob)):
+      yield load_sprite(path.basename(filename), -1)
 
 def load_sprite(name, colorkey=None):
    try:
@@ -19,7 +25,7 @@ def load_sprite(name, colorkey=None):
          # speed. Colorkey sets a color that represents the "background" of 
          # the sprite.  According to online documentation, this is actually
          # faster than a truly transparent image. 
-         image.set_colorkey(colorkey, pygame.locals.RLEACCEL)
+         image.set_colorkey(colorkey, pygame.RLEACCEL)
    return image
 
 def load_tile(name):
