@@ -9,12 +9,13 @@ class Overworld(object):
    def __init__(self, background, playergroup, surface, walls=()):
       self.background = background
       self.playergroup = playergroup
+      # implicit assumption that playergroup is nonempty and the player
+      # is the only member
       self.player = playergroup.sprites()[0]
       self.surface = surface
       self.walls = walls
 
    def processEvent(self, event):
-      #print event
       if event.type == KEYDOWN:
          if event.key == K_UP:
             self.player.startWalking(Direction.BACK)
@@ -24,6 +25,7 @@ class Overworld(object):
             self.player.startWalking(Direction.RIGHT)
          elif event.key == K_DOWN:
             self.player.startWalking(Direction.FRONT)
+         # the following events are temporary for testing
          elif event.key == K_d:
             self.player._die()
          elif event.key == K_u:

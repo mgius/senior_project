@@ -1,5 +1,6 @@
 class Direction():
-   ''' Python lacks a java-style enum, leading to this...'''
+   ''' Python lacks a java-style enum, leading to this
+       I also want to be able to do some C-style bit-ops'''
    LEFT = 1
    FRONT = 2
    RIGHT = 4

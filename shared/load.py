@@ -1,19 +1,17 @@
+import settings
+
 from os import path
 from glob import iglob
 
 import pygame
 
-mediadir = 'media'
-spritedir = path.join(mediadir, 'sprites')
-tilesdir = path.join(mediadir, 'tiles')
-
 def load_sprites_glob(fileglob, colorkey=None):
-   for filename in iglob(path.join(spritedir, fileglob)):
+   for filename in iglob(path.join(settings.spritedir, fileglob)):
       yield load_sprite(path.basename(filename), -1)
 
 def load_sprite(name, colorkey=None):
    try:
-      image = pygame.image.load(path.join(spritedir, name))
+      image = pygame.image.load(path.join(settings.spritedir, name))
    except pygame.error, message: 
       print "cannot load image: %s" % name
       raise SystemExit, message
@@ -30,7 +28,7 @@ def load_sprite(name, colorkey=None):
 
 def load_tile(name):
    try:
-      image = pygame.image.load(path.join(tilesdir, name))
+      image = pygame.image.load(path.join(settings.tilesdir, name))
    except pygame.error, message: 
       print "cannot load image: %s" % name
       raise SystemExit, message
