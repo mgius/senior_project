@@ -36,7 +36,7 @@ def readWalkingAnimations(name):
    return (lfWalk, frWalk, rtWalk, bkWalk)
 
 class Character(pygame.sprite.Sprite):
-   def __init__(self, center = None, spritename='ftr1'):
+   def __init__(self, center=None, spritename='ftr1'):
       pygame.sprite.Sprite.__init__(self)
       # animations and other sprite images
       (self.lfWalk, self.frWalk,
@@ -82,7 +82,7 @@ class Character(pygame.sprite.Sprite):
 
    def _setwalkingdirection(self, direction):
       self.curDirection = direction
-      print "DEBUG: direction: %d" % direction
+      #print "DEBUG: direction: %d" % direction
       if direction == Direction.LEFT:
          self.curAnim = self.lfWalk
          self.speed = [-4, 0]
@@ -102,8 +102,8 @@ class Character(pygame.sprite.Sprite):
 
    def _walkingAnimation(self):
       self.rect.move_ip(self.speed)
-      print "Speed: %s" % self.speed
-      print "Current Location: %d, %d\n" % self.rect.center
+      #print "Speed: %s" % self.speed
+      #print "Current Location: %d, %d\n" % self.rect.center
 
       if self.walkingCount >= self.walkingRate:
          self.walkingCount = 0
@@ -114,7 +114,7 @@ class Character(pygame.sprite.Sprite):
 
    def _walk(self):
       print "DEBUG: Character center: %d, %d" % self.rect.center
-      if self.isWalking and not (self.rect.centerx % 32) and not (self.rect.centery % 32):
+      if self.isWalking and divmod(self.rect.centerx, 32)[1] == 16 and divmod(self.rect.centery, 32)[1] == 16:
          if self.directionBitSet == 0:
             # empty out the direction queue and stop walking
             self.isWalking = False
@@ -129,8 +129,11 @@ class Character(pygame.sprite.Sprite):
                   self._setwalkingdirection(direction)
                   break;
       # finally, trigger the walking animation
-      print "DEBUG: About to animate\n"
+      #print "DEBUG: About to animate"
       self._walkingAnimation()
+
+   def _goback(self):
+      self.rect.move_ip(-self.speed[0], -self.speed[1])
 
 
    def update(self):
@@ -164,5 +167,5 @@ class Character(pygame.sprite.Sprite):
          self.rect.move_ip((1, 0))
       elif self.attackFramesLeft <= 0:
          self.isAttacking = False
-         print "Final location: %d, %d\n" % (self.rect.center)
+         #print "Final location: %d, %d" % (self.rect.center)
       self.attackFramesLeft -= 1

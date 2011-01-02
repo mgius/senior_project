@@ -5,6 +5,7 @@ from pygame.locals import *
 
 from character.character import Character
 from environment.overworld import Overworld
+from environment.wall import Wall
 
 import shared.colors
 from shared.direction import Direction
@@ -16,11 +17,14 @@ screen = pygame.display.set_mode(settings.size)
 
 background = load_tile('green_grey.gif')
 
-man = Character(center=screen.get_rect().center)
+man = Character(center=(32 * 10 + 16, 32 * 10 + 16))
 
 clock = pygame.time.Clock()
 character = pygame.sprite.RenderUpdates((man))
 walls = pygame.sprite.RenderPlain()
+
+for x in range(128, 256, 32):
+   walls.add(Wall(load_tile("brown_wall_center.gif"), topleft=(x, 64)))
 
 #processEvents.downCount = 0
 

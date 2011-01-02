@@ -1,6 +1,7 @@
 import settings
 
 from pygame import Rect
+from pygame import sprite
 from pygame.locals import *
 
 from shared.direction import Direction
@@ -48,19 +49,28 @@ class Overworld(object):
       for x in range(0, settings.width, 32):
          for y in range(0, settings.height, 32):
             self.surface.blit(self.background, Rect(x, y, 32, 32))
+      self.walls.draw(self.surface)
    
    # improve this to only blit the area that the sprite just occupied
    def clear_callback(self, surface, rect):
-      rect.inflate_ip(64, 64)
       (left, top) = rect.topleft
-      rect.topleft = ((left // 32) * 32, (top // 32) * 32)
-      for x in range(rect.left, rect.right, 32):
-         for y in range(rect.top, rect.bottom, 32):
+      newrect = Rect(((left // 32) * 32, (top // 32) * 32), rect.size)
+      if (left % 32 != 0):
+         newrect.width += 32
+      if (top % 32 != 0):
+         newrect.height += 32
+      #print "DEBUG - x: %d, y: %d" % newrect.center
+      #print "DEBUG - w: %d, h: %d\n" % newrect.size
+      for x in range(newrect.left, newrect.right, 32):
+         for y in range(newrect.top, newrect.bottom, 32):
             surface.blit(self.background, Rect(x, y, 32, 32))
 
    def update(self):
       self.player.update()
+      if sprite.spritecollideany(self.player, self.walls):
+         self.player._goback()
    
    def draw(self):
+      # TODO: shouldn't be reblitting when nothing has changed...probably
       self.playergroup.clear(self.surface, self.clear_callback)
       self.playergroup.draw(self.surface)
