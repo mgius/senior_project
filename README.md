@@ -11,7 +11,7 @@ You will need to install a new version of PyGame to run this program.
 If you have easy_install installed, installing the latest pygame is as
 simple as running
 
-    easy_install -U pygame
+    easy_install -U pygame --user
 
 You may need to add yourself to appropriate groups in order to run
-this command as a mortal user.
+this command as a mortal user and add pygame system-wide.
