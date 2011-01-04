@@ -6,6 +6,7 @@ from pygame.locals import *
 from character.character import Character
 from environment.overworld import Overworld
 from environment.wall import Wall
+from battle import battleAnimation
 
 import shared.colors
 from shared.direction import Direction
@@ -37,10 +38,12 @@ def processEvents():
             sys.exit(0)
          elif event.key == K_q:
             sys.exit(0)
+         elif event.key == K_t:
+            battleAnimation.slideRight(screen)
       overworld.processEvent(event)
 
 overworld = Overworld(background, character, screen, walls)
-overworld.fill_background()
+#overworld.fill_background()
 
 while 1:
    processEvents()
