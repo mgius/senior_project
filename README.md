@@ -28,13 +28,18 @@ PyGame installs, this game should work.
   * Example of both in-game implemented and python implemented
   * In-game battle plan editor.
 * Battles
+  * Basic battle screen (By Jan 18)
   * Better battle animations
   * Spells
     * with less shitty animations
 * More sprites to choose from
-* In-game text overlay (status, menu, etc)
-* Better maps
+* In-game text overlay (status, menu, etc) (Something by Jan 18)
+* Better maps (By Jan 18)
 * Better configuration
   * Python config file?
 * "map file format"
   * XML? JSON? Something else?
+* Rect support functions
+  * Clamping/Stretching
+  * Center-determining
+* Re-implement cycle to support restarting animations
