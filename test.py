@@ -4,8 +4,11 @@ import sys, pygame, time, os, math
 from pygame.locals import *
 
 from character.character import Character
+from character.dumbnpc import DumbNPC
+
 from environment.overworld import Overworld
 from environment.wall import Wall
+
 from battle import battleAnimation
 
 import shared.colors
@@ -40,9 +43,16 @@ def processEvents():
             sys.exit(0)
          elif event.key == K_t:
             battleAnimation.slideRight(screen)
+         elif event.key == K_n and event.key == K_LSHIFT or event.key == K_RSHIFT:
+            npc.stopWalking()
+         elif event.key == K_n:
+            npc.startWalking()
       overworld.processEvent(event)
 
 overworld = Overworld(background, character, screen, walls)
+
+npc = DumbNPC(center=(32 * 10 + 16, 32 * 10 + 16))
+overworld.addNPC(npc)
 #overworld.fill_background()
 
 while 1:

@@ -113,7 +113,7 @@ class Character(pygame.sprite.Sprite):
 
 
    def _walk(self):
-      print "DEBUG: Character center: %d, %d" % self.rect.center
+      # when in the center of a block, determine if I should still be moving
       if self.isWalking and divmod(self.rect.centerx, 32)[1] == 16 and divmod(self.rect.centery, 32)[1] == 16:
          if self.directionBitSet == 0:
             # empty out the direction queue and stop walking

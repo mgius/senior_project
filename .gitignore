@@ -1,2 +1,4 @@
 *.swp
 *.pyc
+media/sprites/*.gif
+media/sprites/*.jpg

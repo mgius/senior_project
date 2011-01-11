@@ -5,3 +5,5 @@ class Direction():
    FRONT = 2
    RIGHT = 4
    BACK = 8
+
+   DIRECTIONS = (LEFT, FRONT, RIGHT, BACK)

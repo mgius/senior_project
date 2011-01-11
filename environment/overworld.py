@@ -18,8 +18,12 @@ class Overworld(object):
       self.walls = walls
       self.enterBattle = False
       self.__battleAnimShifted = 0
+      self.npcgroup = sprite.RenderUpdates()
 
       self.fill_background()
+
+   def addNPC(self, npc):
+      self.npcgroup.add(npc)
 
    def processEvent(self, event):
       if event.type == KEYDOWN:
@@ -101,3 +105,4 @@ class Overworld(object):
       if not self.enterBattle:
          self.playergroup.clear(self.surface, self.clear_callback)
          self.playergroup.draw(self.surface)
+         self.npcgroup.draw(self.surface)
