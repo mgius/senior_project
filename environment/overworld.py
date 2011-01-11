@@ -97,12 +97,16 @@ class Overworld(object):
          self._battleTransition()
       else:
          self.player.update()
+         self.npcgroup.update()
          if sprite.spritecollideany(self.player, self.walls):
             self.player._goback()
+         if sprite.spritecollideany(self.player, self.npcgroup):
+            self.startBattleTransition()
    
    def draw(self):
       # TODO: shouldn't be reblitting when nothing has changed...probably
       if not self.enterBattle:
          self.playergroup.clear(self.surface, self.clear_callback)
          self.playergroup.draw(self.surface)
+         self.npcgroup.clear(self.surface, self.clear_callback)
          self.npcgroup.draw(self.surface)

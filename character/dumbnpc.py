@@ -29,53 +29,31 @@ class DumbNPC(Character):
    def stopWalking(self, direction=None):
       self.shouldBeWalking = False
 
-   def _setwalkingdirection(self, direction):
-      self.curDirection = direction
-      #print "DEBUG: direction: %d" % direction
-      if direction == Direction.LEFT:
-         self.curAnim = self.lfWalk
-         self.speed = [-4, 0]
-      elif direction == Direction.FRONT:
-         self.curAnim = self.frWalk
-         self.speed = [0, 4]
-      elif direction == Direction.RIGHT:
-         self.curAnim = self.rtWalk
-         self.speed = [4, 0]
-      elif direction == Direction.BACK:
-         self.curAnim = self.bkWalk
-         self.speed = [0, -4]
-
-      self.image = self.curAnim.next()
-      # Force a frame update
-      self.walkingCount = self.walkingRate
-
-   #def _walkingAnimation(self):
-
-   # TODO: this is an absolute mess, clean it up
    def _walk(self):
-      print "In NPC _walk"
-      if self.toWait > 0:
-         self.toWait -= 1
-         return
-      elif self.isWalking and divmod(self.rect.centerx, 32)[1] == 16 and divmod(self.rect.centery, 32)[1] == 16:
+      # not walking, but I should be, or soonish
+      if not self.isWalking:
+         if self.toWait > 0:
+            self.toWait -= 1
+            return
+         else:
+            self._setwalkingdirection(random.choice(Direction.DIRECTIONS))
+            self.isWalking = True
+
+      # found a block center
+      elif divmod(self.rect.centerx, 32)[1] == 16 and divmod(self.rect.centery, 32)[1] == 16:
          self.isWalking = False
-         self.curDirection = None
-         if self.shouldBeWalking:
+         # shouldn't be walking, exit out
+         if not self.shouldBeWalking:
+            return
+         else:
             self.toWait = self.walkDelay
-         return
-      elif self.shouldBeWalking and self.toWait == 0:
-         self.curDirection = random.choice(direction.DIRECTIONS)
+            return
 
       self._walkingAnimation()
 
-   #def _goback(self):
 
-   #def update(self):
-
-   #def _die(self):
-
-   #def _revive(self):
-
-   #def startAttack(self):
-
-   #def _attack(self):
+   def update(self):
+      if self.isDead:
+         return
+      if self.shouldBeWalking or self.isWalking:
+         self._walk()

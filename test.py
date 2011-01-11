@@ -3,7 +3,8 @@ import settings
 import sys, pygame, time, os, math
 from pygame.locals import *
 
-from character.character import Character
+from character.playercharacter import PlayerCharacter
+
 from character.dumbnpc import DumbNPC
 
 from environment.overworld import Overworld
@@ -21,7 +22,7 @@ screen = pygame.display.set_mode(settings.size)
 
 background = load_tile('green_grey.gif')
 
-man = Character(center=(32 * 10 + 16, 32 * 10 + 16))
+man = PlayerCharacter(center=(32 * 10 + 16, 32 * 10 + 16))
 
 clock = pygame.time.Clock()
 character = pygame.sprite.RenderUpdates((man))
@@ -51,7 +52,7 @@ def processEvents():
 
 overworld = Overworld(background, character, screen, walls)
 
-npc = DumbNPC(center=(32 * 10 + 16, 32 * 10 + 16))
+npc = DumbNPC(center=(32 * 13 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
 overworld.addNPC(npc)
 #overworld.fill_background()
 

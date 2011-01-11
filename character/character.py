@@ -47,8 +47,6 @@ class Character(pygame.sprite.Sprite):
       self.speed = [0,0]
       self.walkingRate = settings.fps / 10 # frames between steps
       self.walkingCount = self.walkingRate # frames until next step
-      self.directionQueue = deque()
-      self.directionBitSet = 0
       self.curDirection = None
       self.isWalking = False
       self.isDead = False
@@ -61,24 +59,10 @@ class Character(pygame.sprite.Sprite):
          self.rect.center = center
 
    def startWalking(self, direction):
-      if self.isDead:
-         return
-      # somebody spamming a direction key, the jerk
-      if self.curDirection == direction:
-         return
-      # we best be walking now
-      self.isWalking = True
-
-      # OR in the new direction
-      self.directionBitSet |= direction
-      # and add it to the queue of directions
-      self.directionQueue.append(direction)
+      raise NotImplementedError, "This must be implemented by subclass"
 
    def stopWalking(self, direction):
-      self.directionBitSet &= ~direction
-      # should probably reset to a standing pose...hmm....
-      # probably will be handled by block based moving, assuming I time the
-      # animation correctly
+      raise NotImplementedError, "This must be implemented by subclass"
 
    def _setwalkingdirection(self, direction):
       self.curDirection = direction
@@ -102,8 +86,6 @@ class Character(pygame.sprite.Sprite):
 
    def _walkingAnimation(self):
       self.rect.move_ip(self.speed)
-      #print "Speed: %s" % self.speed
-      #print "Current Location: %d, %d\n" % self.rect.center
 
       if self.walkingCount >= self.walkingRate:
          self.walkingCount = 0
@@ -134,7 +116,6 @@ class Character(pygame.sprite.Sprite):
 
    def _goback(self):
       self.rect.move_ip(-self.speed[0], -self.speed[1])
-
 
    def update(self):
       if self.isDead:
