@@ -3,7 +3,7 @@ import settings
 import pygame
 
 from collections import deque
-from itertools import cycle
+from shared.cycle import cycle
 from glob import iglob
 
 from shared.direction import Direction
