@@ -42,4 +42,3 @@ PyGame installs, this game should work.
 * Rect support functions
   * Clamping/Stretching
   * Center-determining
-* Re-implement cycle to support restarting animations

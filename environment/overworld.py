@@ -100,6 +100,8 @@ class Overworld(object):
          self.npcgroup.update()
          if sprite.spritecollideany(self.player, self.walls):
             self.player._goback()
+         for npc in sprite.groupcollide(self.npcgroup, self.walls, False, False):
+            npc._goback()
          if sprite.spritecollideany(self.player, self.npcgroup):
             self.startBattleTransition()
    

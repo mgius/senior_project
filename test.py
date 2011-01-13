@@ -50,9 +50,16 @@ def processEvents():
             npc.startWalking()
       overworld.processEvent(event)
 
+for topleft in ((11,14),(11,13),(11,12),(12,12),(13,12),
+                (14,12),(15,12),(15,13),(15,14),(15,15),
+                (15,16),(14,16),(13,16),(12,16),(11,16),
+                (11,15)
+                ):
+   walls.add(Wall(load_tile("brown_wall_center.gif"), topleft=(topleft[0] * 32, topleft[1] * 32)))
 overworld = Overworld(background, character, screen, walls)
 
 npc = DumbNPC(center=(32 * 13 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
+
 overworld.addNPC(npc)
 #overworld.fill_background()
 
