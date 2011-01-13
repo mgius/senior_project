@@ -7,6 +7,8 @@ from pygame.locals import *
 from shared.direction import Direction
 from shared.colors import black
 
+from status.overworldstatus import OverWorldStatus
+
 class Overworld(object):
    def __init__(self, background, playergroup, surface, walls=()):
       self.background = background
@@ -19,6 +21,8 @@ class Overworld(object):
       self.enterBattle = False
       self.__battleAnimShifted = 0
       self.npcgroup = sprite.RenderUpdates()
+
+      self.statusBar = OverWorldStatus(self.surface, self.player)
 
       self.fill_background()
 
@@ -55,8 +59,8 @@ class Overworld(object):
 
    # may want to optimize this
    def fill_background(self):
-      for x in range(0, settings.width, 32):
-         for y in range(0, settings.height, 32):
+      for x in range(0, settings.mapwidth, 32):
+         for y in range(0, settings.mapheight, 32):
             self.surface.blit(self.background, Rect(x, y, 32, 32))
       self.walls.draw(self.surface)
    
@@ -74,11 +78,11 @@ class Overworld(object):
             surface.blit(self.background, Rect(x, y, 32, 32))
 
    def _battleTransition(self):
-      self.surface.scroll(dx=settings.width/60)
+      self.surface.scroll(dx=settings.mapwidth/60)
       self.surface.fill(black, rect=Rect(self.__battleAnimShifted, 0, settings.width/60, settings.height))
-      self.__battleAnimShifted += settings.width/60
+      self.__battleAnimShifted += settings.mapwidth/60
       #self._battleTransition.scrolled += 5
-      if self.__battleAnimShifted >= settings.width:
+      if self.__battleAnimShifted >= settings.mapwidth:
          self.enterBattle = False
          print "Stopped animating after %d pixels" % self.__battleAnimShifted
 
@@ -112,3 +116,4 @@ class Overworld(object):
          self.playergroup.draw(self.surface)
          self.npcgroup.clear(self.surface, self.clear_callback)
          self.npcgroup.draw(self.surface)
+      self.statusBar.draw()

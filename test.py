@@ -18,7 +18,7 @@ from shared.load import load_sprite, load_tile
 
 pygame.init()
 
-screen = pygame.display.set_mode(settings.size)
+screen = pygame.display.set_mode(settings.totalsize)
 
 background = load_tile('green_grey.gif')
 
@@ -56,12 +56,16 @@ for topleft in ((11,14),(11,13),(11,12),(12,12),(13,12),
                 (11,15)
                 ):
    walls.add(Wall(load_tile("brown_wall_center.gif"), topleft=(topleft[0] * 32, topleft[1] * 32)))
+
 overworld = Overworld(background, character, screen, walls)
 
 npc = DumbNPC(center=(32 * 13 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
 
 overworld.addNPC(npc)
 #overworld.fill_background()
+
+if not pygame.font.get_init():
+   print "Font rendering subsystem missing."
 
 while 1:
    processEvents()
