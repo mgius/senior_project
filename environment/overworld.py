@@ -5,6 +5,9 @@ from pygame import sprite
 from pygame.locals import *
 
 from environment import Environment
+
+from event import BattleEvent
+
 from wall import Wall
 
 from shared.direction import Direction
@@ -94,8 +97,11 @@ class Overworld(Environment):
             self.player._goback()
          for npc in sprite.groupcollide(self.npcgroup, self.walls, False, False):
             npc._goback()
-         if sprite.spritecollideany(self.player, self.npcgroup):
-            self.startBattleTransition()
+         npcCollisions = sprite.spritecollide(self.player, self.npcgroup, True)
+         if len(npcCollisions) > 0:
+            return BattleEvent(self.player, npcCollisions)
+      return None
+         
    
    def draw(self, surface):
       # TODO: shouldn't be reblitting when nothing has changed...probably

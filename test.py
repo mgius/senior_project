@@ -51,17 +51,46 @@ jsonData = json.load(testOverworldFile)
 
 overworld = Overworld.fromJson(jsonData, man)
 
+npc = DumbNPC(center=(32 * 8 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
+
+overworld.addNPC(npc)
+
 npc = DumbNPC(center=(32 * 13 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
 
 overworld.addNPC(npc)
+
 #overworld.fill_background()
 
 if not pygame.font.get_init():
    print "Font rendering subsystem missing."
 
+isBattleAnimation = False
+isBattle = False
+battleAnim = None
 while 1:
+   clock.tick(settings.fps)
+
+   if battleAnim is not None:
+      print "BattleAnim"
+      try:
+         battleAnim.next()
+      except StopIteration:
+         battleAnim = None
+         isBattle = True
+      continue
+
+   if isBattle:
+      # something here
+      pass
+
    processEvents()
-   overworld.update()
+   event = overworld.update()
+   if event is not None:
+      print "Boo"
+      # currently can only be BattleEvent
+      battleAnim = battleAnimation.slideRight(screen)
+      continue
+
    overworld.draw(screen)
    pygame.display.flip()
-   clock.tick(settings.fps)
+

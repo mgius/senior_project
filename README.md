@@ -24,7 +24,7 @@ PyGame installs, this game should work.
 
 # To Do List
 
-* Battle decision backend
+* Battle decision backend (simple version by Jan 25)
   * Example of both in-game implemented and python implemented
   * In-game battle plan editor.
 * Battles
@@ -37,9 +37,9 @@ PyGame installs, this game should work.
 * Better maps (By Jan 18)
 * Better configuration
   * Python config file?
+  * may not be worth it
 * "map file format"
   * XML? JSON? Something else?
 * Rect support functions
   * Clamping/Stretching
   * Center-determining
-* Re-implement cycle to support restarting animations

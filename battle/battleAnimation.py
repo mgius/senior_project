@@ -15,10 +15,7 @@ def _horizSlide(surface, dx=None, slideTime=2, distance=settings.mapwidth):
    for x in range(0, distance, dx):
       surface.scroll(dx=dx)
       surface.fill(black, rect=Rect(x, 0, dx, settings.mapheight,))
-      clock.tick(settings.fps)
-
-   print "DEBUG: STOP"
-
+      yield True
 
 def slideRight(surface):
    _horizSlide(surface)
