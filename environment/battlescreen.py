@@ -4,65 +4,44 @@ from pygame import Rect
 from pygame import sprite
 from pygame.locals import *
 
-from environment import Environment
-from wall import Wall
-
 from shared.direction import Direction
 from shared.colors import black
 
 from status.overworldstatus import OverWorldStatus
 
-class Overworld(Environment):
-   def __init__(self, background, surface, playergroup, walls=()):
-      Environment.__init__(self, background, surface)
+class Battlefield(object):
+   def __init__(self, background, playergroup, surface, enemygroup):
+      self.background = background
       self.playergroup = playergroup
       # implicit assumption that playergroup is nonempty and the player
       # is the only member
       self.player = playergroup.sprites()[0]
-      self.walls = walls
-      self.enterBattle = False
-      self.__battleAnimShifted = 0
-      self.npcgroup = sprite.RenderUpdates()
+      self.surface = surface
+      self.enemygroup = enemygroup
 
-      self.statusBar = OverWorldStatus(self.surface, self.player)
+      self.statusBar = BattlefieldStatus(self.surface, self.player, self.enemygroup)
+
+      self.fill_background()
+
+   # may want to optimize this
+   def fill_background(self):
+      for x in range(0, settings.mapwidth, 32):
+         for y in range(0, settings.mapheight, 32):
+            self.surface.blit(self.background, Rect(x, y, 32, 32))
       self.walls.draw(self.surface)
-
-   @staticmethod
-   def fromJson(jsonData):
-      #jsonData["locationName"]
-      backgroundTile = jsonData["backgroundTile"]
-      walls = Wall.fromJson(jsonData["walls"])
-
-   def addNPC(self, npc):
-      self.npcgroup.add(npc)
-
-   def processEvent(self, event):
-      if event.type == KEYDOWN:
-         if event.key == K_UP:
-            self.player.startWalking(Direction.BACK)
-         elif event.key == K_LEFT:
-            self.player.startWalking(Direction.LEFT)
-         elif event.key == K_RIGHT:
-            self.player.startWalking(Direction.RIGHT)
-         elif event.key == K_DOWN:
-            self.player.startWalking(Direction.FRONT)
-         # the following events are temporary for testing
-         elif event.key == K_d:
-            self.player._die()
-         elif event.key == K_u:
-            self.player._revive()
-         elif event.key == K_a:
-            self.player.startAttack()
-
-      elif event.type == KEYUP:
-         if event.key == K_UP:
-            self.player.stopWalking(Direction.BACK)
-         elif event.key == K_LEFT:
-            self.player.stopWalking(Direction.LEFT)
-         elif event.key == K_RIGHT:
-            self.player.stopWalking(Direction.RIGHT)
-         elif event.key == K_DOWN:
-            self.player.stopWalking(Direction.FRONT)
+   
+   def clear_callback(self, surface, rect):
+      (left, top) = rect.topleft
+      # lock blitting area to a 32x32 block
+      newrect = Rect(((left // 32) * 32, (top // 32) * 32), rect.size)
+      # stretch to also blit the square next to it if necessary
+      if (left % 32 != 0):
+         newrect.width += 32
+      if (top % 32 != 0):
+         newrect.height += 32
+      for x in range(newrect.left, newrect.right, 32):
+         for y in range(newrect.top, newrect.bottom, 32):
+            surface.blit(self.background, Rect(x, y, 32, 32))
 
    def _battleTransition(self):
       self.surface.scroll(dx=settings.mapwidth/60)
