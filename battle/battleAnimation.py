@@ -9,7 +9,7 @@ from shared.colors import black
 
 def _horizSlide(surface, dx=None, slideTime=2, distance=settings.mapwidth):
    if dx is None:
-      dx = settings.width / (slideTime * settings.fps)
+      dx = settings.mapwidth / (slideTime * settings.fps)
 
    clock = time.Clock()
    for x in range(0, distance, dx):
@@ -18,7 +18,7 @@ def _horizSlide(surface, dx=None, slideTime=2, distance=settings.mapwidth):
       yield True
 
 def slideRight(surface):
-   _horizSlide(surface)
+   return _horizSlide(surface)
 
 
 

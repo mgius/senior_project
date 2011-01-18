@@ -77,20 +77,25 @@ while 1:
       except StopIteration:
          battleAnim = None
          isBattle = True
-      continue
 
-   if isBattle:
-      # something here
-      pass
+   elif isBattle:
+      print "Oh Hai! Battle here!"
+      isBattle = False
+      overworld.fulldraw(screen)
 
-   processEvents()
-   event = overworld.update()
-   if event is not None:
-      print "Boo"
-      # currently can only be BattleEvent
-      battleAnim = battleAnimation.slideRight(screen)
-      continue
+      # battle finished
 
-   overworld.draw(screen)
+   else:
+      processEvents()
+      event = overworld.update()
+      if event is not None:
+         print "Boo"
+         # currently can only be BattleEvent
+         battleAnim = battleAnimation.slideRight(screen)
+         print "battleAnim:", battleAnim
+         continue
+
+      overworld.draw(screen)
+
    pygame.display.flip()
 

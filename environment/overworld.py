@@ -113,3 +113,7 @@ class Overworld(Environment):
       self.npcgroup.clear(surface, self.clear_callback)
       self.npcgroup.draw(surface)
       self.statusBar.draw(surface)
+
+   def fulldraw(self, surface):
+      self._shouldFillBackground = True
+      self.draw(surface)

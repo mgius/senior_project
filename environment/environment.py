@@ -36,5 +36,8 @@ class Environment(object):
    def update(self):
       raise NotImplementedError, "This must be implemented by subclass"
    
-   def draw(self, update):
+   def draw(self, surface):
       raise NotImplementedError, "This must be implemented by subclass"
+
+   def fulldraw(self, surface):
+      self.fill_background(surface)
