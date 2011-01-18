@@ -13,25 +13,25 @@ from shared.colors import black
 from status.overworldstatus import OverWorldStatus
 
 class Overworld(Environment):
-   def __init__(self, background, surface, playergroup, walls=()):
-      Environment.__init__(self, background, surface)
-      self.playergroup = playergroup
+   def __init__(self, background, player, location, walls=()):
+      Environment.__init__(self, background)
+      self.player = player
+      self.playergroup = sprite.RenderUpdates((player))
       # implicit assumption that playergroup is nonempty and the player
       # is the only member
-      self.player = playergroup.sprites()[0]
-      self.walls = walls
+      self.walls = sprite.RenderPlain(walls)
       self.enterBattle = False
       self.__battleAnimShifted = 0
       self.npcgroup = sprite.RenderUpdates()
 
-      self.statusBar = OverWorldStatus(self.surface, self.player)
-      self.walls.draw(self.surface)
+      self.statusBar = OverWorldStatus(self.player, location)
 
    @staticmethod
-   def fromJson(jsonData):
-      #jsonData["locationName"]
+   def fromJson(jsonData, player):
       backgroundTile = jsonData["backgroundTile"]
       walls = Wall.fromJson(jsonData["walls"])
+      location = jsonData["locationName"]
+      return Overworld(backgroundTile, player, location, walls)
 
    def addNPC(self, npc):
       self.npcgroup.add(npc)
@@ -64,24 +64,25 @@ class Overworld(Environment):
          elif event.key == K_DOWN:
             self.player.stopWalking(Direction.FRONT)
 
-   def _battleTransition(self):
-      self.surface.scroll(dx=settings.mapwidth/60)
-      self.surface.fill(black, rect=Rect(self.__battleAnimShifted, 0, settings.width/60, settings.height))
-      self.__battleAnimShifted += settings.mapwidth/60
-      #self._battleTransition.scrolled += 5
-      if self.__battleAnimShifted >= settings.mapwidth:
-         self.enterBattle = False
-         print "Stopped animating after %d pixels" % self.__battleAnimShifted
+   #def _battleTransition(self):
+   #   # TODO: Now broken
+   #   self.surface.scroll(dx=settings.mapwidth/60)
+   #   self.surface.fill(black, rect=Rect(self.__battleAnimShifted, 0, settings.width/60, settings.height))
+   #   self.__battleAnimShifted += settings.mapwidth/60
+   #   #self._battleTransition.scrolled += 5
+   #   if self.__battleAnimShifted >= settings.mapwidth:
+   #      self.enterBattle = False
+   #      print "Stopped animating after %d pixels" % self.__battleAnimShifted
 
-   def startBattleTransition(self):
-      if not self.enterBattle:
-         self.enterBattle = True
-         self.__battleAnimShifted = 0
-      #   self._battleTransition.scrolled = 0
+   #def startBattleTransition(self):
+   #   if not self.enterBattle:
+   #      self.enterBattle = True
+   #      self.__battleAnimShifted = 0
+   #   #   self._battleTransition.scrolled = 0
 
-   def endBattle(self):
-      self.fill_background()
-      self.draw()
+   #def endBattle(self):
+   #   self.fill_background()
+   #   self.draw()
 
    def update(self):
       if self.enterBattle:
@@ -96,11 +97,13 @@ class Overworld(Environment):
          if sprite.spritecollideany(self.player, self.npcgroup):
             self.startBattleTransition()
    
-   def draw(self):
+   def draw(self, surface):
       # TODO: shouldn't be reblitting when nothing has changed...probably
-      if not self.enterBattle:
-         self.playergroup.clear(self.surface, self.clear_callback)
-         self.playergroup.draw(self.surface)
-         self.npcgroup.clear(self.surface, self.clear_callback)
-         self.npcgroup.draw(self.surface)
-      self.statusBar.draw()
+      if self._shouldFillBackground:
+         self.fill_background(surface)
+         self.walls.draw(surface)
+      self.playergroup.clear(surface, self.clear_callback)
+      self.playergroup.draw(surface)
+      self.npcgroup.clear(surface, self.clear_callback)
+      self.npcgroup.draw(surface)
+      self.statusBar.draw(surface)

@@ -1,4 +1,5 @@
 import settings
+import json
 
 import sys, pygame, time, os, math
 from pygame.locals import *
@@ -25,11 +26,6 @@ background = load_tile('green_grey.gif')
 man = PlayerCharacter(center=(32 * 10 + 16, 32 * 10 + 16))
 
 clock = pygame.time.Clock()
-character = pygame.sprite.RenderUpdates((man))
-walls = pygame.sprite.RenderPlain()
-
-for x in range(128, 256, 32):
-   walls.add(Wall(load_tile("brown_wall_center.gif"), topleft=(x, 64)))
 
 #processEvents.downCount = 0
 
@@ -50,14 +46,10 @@ def processEvents():
             npc.startWalking()
       overworld.processEvent(event)
 
-for topleft in ((11,14),(11,13),(11,12),(12,12),(13,12),
-                (14,12),(15,12),(15,13),(15,14),(15,15),
-                (15,16),(14,16),(13,16),(12,16),(11,16),
-                (11,15)
-                ):
-   walls.add(Wall(load_tile("brown_wall_center.gif"), topleft=(topleft[0] * 32, topleft[1] * 32)))
+testOverworldFile = open("media/maps/testArena.json")
+jsonData = json.load(testOverworldFile)
 
-overworld = Overworld(background, screen, character, walls)
+overworld = Overworld.fromJson(jsonData, man)
 
 npc = DumbNPC(center=(32 * 13 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
 
@@ -70,6 +62,6 @@ if not pygame.font.get_init():
 while 1:
    processEvents()
    overworld.update()
-   overworld.draw()
+   overworld.draw(screen)
    pygame.display.flip()
    clock.tick(settings.fps)
