@@ -34,6 +34,10 @@ PyGame installs, this game should work.
     * with less shitty animations
 * More sprites to choose from
 * In-game text overlay (status, menu, etc) (Something by Jan 18)
+  * Need a wrapper around text supporting following features
+    * Line wrapping
+    * Fetching text + surface from the same object
+    * Mostly line wrapping
 * Better maps (By Jan 18)
 * Better configuration
   * Python config file?
@@ -43,3 +47,6 @@ PyGame installs, this game should work.
 * Rect support functions
   * Clamping/Stretching
   * Center-determining
+
+# Bugs
+* Moving and "attacking" at the same kind causes...interesting results

@@ -9,6 +9,7 @@ from character.playercharacter import PlayerCharacter
 from character.dumbnpc import DumbNPC
 
 from environment.overworld import Overworld
+from environment.battlescreen import Battlefield
 from environment.wall import Wall
 
 from battle import battleAnimation
@@ -67,6 +68,7 @@ if not pygame.font.get_init():
 isBattleAnimation = False
 isBattle = False
 battleAnim = None
+rgpevent = None
 while 1:
    clock.tick(settings.fps)
 
@@ -77,18 +79,16 @@ while 1:
       except StopIteration:
          battleAnim = None
          isBattle = True
+         battleScreen = Battlefield("red_silver.gif", rpgevent.player, rpgevent.opponents)
 
    elif isBattle:
-      print "Oh Hai! Battle here!"
-      isBattle = False
-      overworld.fulldraw(screen)
-
-      # battle finished
+      battleScreen.update()
+      battleScreen.draw(screen)
 
    else:
       processEvents()
-      event = overworld.update()
-      if event is not None:
+      rpgevent = overworld.update()
+      if rpgevent is not None:
          print "Boo"
          # currently can only be BattleEvent
          battleAnim = battleAnimation.slideRight(screen)

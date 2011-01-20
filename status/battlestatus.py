@@ -5,34 +5,36 @@ from pygame import font
 from shared import colors
 
 class BattlefieldStatus(object):
-   def __init__(self, surface, player, enemygroup):
+   def __init__(self, player, enemygroup):
       self.player = player
-      self.surface = surface
       self.enemygroup = enemygroup
-      # placeholders
-      self.playername = "Player"
-      self.hp = "HP: " + str(12)
-      self.mp = "MP: " + str(10)
-      self.locationname = "The Pit of Despair"
+
+      # temporary hack
+      self.enemy = enemygroup.sprites()[0]
 
       self.font = font.SysFont(font.get_default_font(), 32)
 
       # might be more appropriate to calculate this somewhere else
       self._statusMiddle = settings.statusheight / 2 + settings.mapheight
 
-   def draw(self):
-      locationtext = self.font.render(self.locationname, False, colors.white)
-      self.surface.blit(locationtext, (32, self._statusMiddle))
 
-      hptext = self.font.render(self.hp, False, colors.white)
-      mptext = self.font.render(self.mp, False, colors.white)
+   # TODO: Need to split out re-rendering of attributes vs blitting them,
+   #       just like everything else.  Probably not worth it to flag 
+   #       attributes as changed, but playername is unlikely to change.
+   def update(self):
+      pass
 
-      hptextsize = self.font.size(self.hp)
-      mptextsize = self.font.size(self.mp)
+   # this function is a goddamn mess.  I need to organize this data far better
+   def draw(self,surface):
+      playernametext = self.font.render(self.player.name, False, colors.white)
+      playerhptext = self.font.render("HP: " + str(self.player.hp), False, colors.white)
+      playermptext = self.font.render("MP: " + str(self.player.mp), False, colors.white)
 
-      width = max((hptextsize[0], mptextsize[0])) + 6
+      playernamesize = self.font.size()
+      (playerhptextsize, mptextsize) = (self.font.size(self.player.hp), self.font.size(self.player.mp))
 
-      self.surface.blit(hptext, (settings.statuswidth - width, self._statusMiddle))
-      self.surface.blit(mptext, (settings.statuswidth - width, self._statusMiddle + mptextsize[1]))
+      playertextwidth = max((playernamesize[0], playerhptextsize[0], playermptextsize[0])) + 6
 
-
+      surface.blit(playernametext, (settings.statuswidth - width, self._statusMiddle - playernamesize[1]))
+      surface.blit(playerhptext, (settings.statuswidth - width, self._statusMiddle))
+      surface.blit(playermptext, (settings.statuswidth - width, self._statusMiddle + playermptextsize[1]))
