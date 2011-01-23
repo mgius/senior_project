@@ -3,6 +3,8 @@ from os import path
 mediadir = 'media'
 spritedir = path.join(mediadir, 'sprites')
 tilesdir = path.join(mediadir, 'tiles')
+weaponsdir = path.join(mediadir, 'weapons')
+armordir = path.join(mediadir, 'armor')
 
 # Current restriction: must be a multiple of 32
 mapsize = mapwidth, mapheight = 640, 640

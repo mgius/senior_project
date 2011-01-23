@@ -1,0 +1,9 @@
+{ "characterName" : "Gimli",
+  "spritename" : "ftr1",
+  "maxhp" : 12,
+  "maxmp" : 8,
+  "curhp" : 10,
+  "curmp" : 8,
+}
+
+
