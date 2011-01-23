@@ -9,7 +9,7 @@ class Weapon(object):
       self.elem = elem if elem is not None else "none"
 
    @staticmethod
-   def fromJson(name):
+   def load(name):
       jsonData = load_weapon_data(name)
       return Weapon(jsonData['name'], jsonData['lowdmg'],
                     jsonData['highdmg'], jsonData['elem'])
@@ -31,7 +31,7 @@ class Armor(object):
       self.elem = elem if elem is not None else "none"
 
    @staticmethod
-   def fromJson(name):
+   def load(name):
       jsonData = load_armor_data(name)
       return Armor(jsonData['name'], jsonData['lowred'],
                    jsonData['highred'], jsonData['elem'])

@@ -5,6 +5,7 @@ spritedir = path.join(mediadir, 'sprites')
 tilesdir = path.join(mediadir, 'tiles')
 weaponsdir = path.join(mediadir, 'weapons')
 armordir = path.join(mediadir, 'armor')
+characterdir = path.join(mediadir, 'characters')
 
 # Current restriction: must be a multiple of 32
 mapsize = mapwidth, mapheight = 640, 640

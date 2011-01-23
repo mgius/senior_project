@@ -4,7 +4,7 @@ import json
 import sys, pygame, time, os, math
 from pygame.locals import *
 
-from character.playercharacter import PlayerCharacter
+from character.battlecharacter import BattleCharacter
 
 from character.dumbnpc import DumbNPC
 
@@ -24,7 +24,7 @@ screen = pygame.display.set_mode(settings.totalsize)
 
 background = load_tile('green_grey.gif')
 
-man = PlayerCharacter(center=(32 * 10 + 16, 32 * 10 + 16))
+man = BattleCharacter.load("gimli", center=(32 * 10 + 16, 32 * 10 + 16))
 
 clock = pygame.time.Clock()
 
