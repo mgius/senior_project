@@ -1,0 +1,45 @@
+\documentclass[12pt]{article}
+
+\usepackage{fullpage} % does reasonable things
+\usepackage{setspace} % allows double spacing
+
+\begin{document}
+\title{}
+\author{Mark Gius}
+\date{\today}
+\maketitle
+
+\section{Project Description}
+I would like to build an RPG style game that requires the player to control
+characters through programmable strategies, rather than manual control. This
+project is similar to RoboCode (http://robocode.sourceforge.net), a tank
+warfare game where player-written AI's duel.
+
+\section{Primary Feature Goals}
+A playable JRPG-style game, similar to Super Nintendo era games.  Players
+control a number of player characters who are able to battle with computer
+controlled characters. The player characters are able to use weapons, cast
+spells, and use items.  Control of the player characters is performed
+exclusively by sets of condition-response pairs, which I call strategies.  For
+example: a condition of health less than 50\% might have an associated response
+to heal with a potion.  Players must construct their strategies well to succeed
+in the game. Primary focus for the project will be the battle system. GUI
+interface using the PyGame development libraries.
+
+\section{Secondary Feature Goals}
+Player vs. Player interaction would be a fun addition to the game, but is not a
+mandatory requirement.  I would like for every aspect of the game to be easily
+pluggable.  For example, adding new spells, weapons, and monsters should be
+trivial.  It should also be simple for a motivated coder to replace the
+strategies system with either a manually controlled interface, or some other
+controlling mechanism.  The ability to create and navigate ``campaigns'' that
+the player can navigate through is a relatively import secondary objective.
+
+\section{Special Requests}
+I require no special hardware for this project.  It would be helpful if the
+PyGame development libraries were installed to at least some on-campus lab
+machines to allow development of the program on campus. This software is
+already present in the repositories for the department linux machines, but it
+is not currently installed.
+
+\end{document}
