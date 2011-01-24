@@ -12,11 +12,11 @@ from shared.colors import black
 from status.battlestatus import BattlefieldStatus
 
 class Battlefield(Environment):
-   def __init__(self, background, player, enemygroup):
+   def __init__(self, background, player, enemy):
       Environment.__init__(self, background)
       self.player = player
-      self.playergroup = sprite.RenderUpdates((player))
-      self.enemygroup = sprite.RenderUpdates((enemygroup))
+      self.enemy = enemy
+      self.sprites = sprite.RenderUpdates((player,enemy))
 
       # stop the player and make him turn left
       self.player.stopWalking(self.player.curDirection)
@@ -24,7 +24,7 @@ class Battlefield(Environment):
       self.player.stopWalking(self.player.curDirection)
 
       # stop the npc and make him turn right
-      self.enemy = self.enemygroup.sprites()[0]
+      self.enemy.stopWalking(self.enemy.curDirection)
       self.enemy._setwalkingdirection(Direction.RIGHT)
       self.enemy.stopWalking(self.enemy.curDirection)
 
@@ -32,17 +32,7 @@ class Battlefield(Environment):
       self.enemy.rect.center = (32 + 16, 320 + 16)
       self.player.rect = (608 - 16, 320 + 16)
 
-      ##TODO:  This is a hack
-      #self.player.name = "Player"
-      #self.player.hp = 12
-      #self.player.mp = 10
-
-      #for enemy in self.enemygroup:
-      #   enemy.name = "Tom"
-      #   enemy.hp = 1000
-      #   enemy.mp = 4000
-
-      #self.statusBar = BattlefieldStatus(self.player, self.enemygroup)
+      self.statusBar = BattlefieldStatus(self.player, self.enemy)
 
    def update(self):
       # this is awful, I hate myself
@@ -61,8 +51,5 @@ class Battlefield(Environment):
       if self._shouldFillBackground:
          self.fill_background(surface)
          #self.walls.draw(surface)
-      self.playergroup.clear(surface, self.clear_callback)
-      self.playergroup.draw(surface)
-      self.enemygroup.clear(surface, self.clear_callback)
-      self.enemygroup.draw(surface)
+      self.sprites.draw()
       #self.statusBar.draw(surface)

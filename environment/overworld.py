@@ -75,11 +75,11 @@ class Overworld(Environment):
          self.player._goback()
       for npc in sprite.groupcollide(self.npcgroup, self.walls, False, False):
          npc._goback()
-      npcCollisions = sprite.spritecollide(self.player, self.npcgroup, True)
+      npcCollisions = sprite.spritecollide(self.player, self.npcgroup, False)
       if len(npcCollisions) > 0:
-         for npc in npcCollisions:
-            self.sprites.remove(npc)
-         return BattleEvent(self.player, npcCollisions)
+         self.sprites.remove(npcCollisions[0])
+         self.npcgroup.remove(npcCollisions[0])
+         return BattleEvent(self.player, npcCollisions[0])
       return None
          
    

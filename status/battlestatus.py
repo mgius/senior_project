@@ -5,36 +5,52 @@ from pygame import font
 from shared import colors
 
 class BattlefieldStatus(object):
-   def __init__(self, player, enemygroup):
+   def __init__(self, player, enemy):
       self.player = player
-      self.enemygroup = enemygroup
-
-      # temporary hack
-      self.enemy = enemygroup.sprites()[0]
+      self.enemy = enemy
 
       self.font = font.SysFont(font.get_default_font(), 32)
+
+      # player names won't change
+      self.playernamesize = self.font.size(self.player.charactername)
+      self.playername = self.font.render(self.player.charactername, False, colors.white)
+
+      # player names won't change
+      self.enemynamesize = self.font.size(self.enemy.charactername)
+      self.enemyname = self.font.render(self.enemy.charactername, False, colors.white)
 
       # might be more appropriate to calculate this somewhere else
       self._statusMiddle = settings.statusheight / 2 + settings.mapheight
 
-
-   # TODO: Need to split out re-rendering of attributes vs blitting them,
-   #       just like everything else.  Probably not worth it to flag 
-   #       attributes as changed, but playername is unlikely to change.
-   def update(self):
-      pass
-
    # this function is a goddamn mess.  I need to organize this data far better
    def draw(self,surface):
-      playernametext = self.font.render(self.player.name, False, colors.white)
-      playerhptext = self.font.render("HP: " + str(self.player.hp), False, colors.white)
-      playermptext = self.font.render("MP: " + str(self.player.mp), False, colors.white)
 
-      playernamesize = self.font.size()
-      (playerhptextsize, mptextsize) = (self.font.size(self.player.hp), self.font.size(self.player.mp))
+      # draw player's hp
+      hptext = "HP: " + str(self.player.curhp)
+      mptext = "MP: " + str(self.player.curmp)
 
-      playertextwidth = max((playernamesize[0], playerhptextsize[0], playermptextsize[0])) + 6
+      hptextsize = self.font.size(hptext)
+      mptextsize = self.font.size(mptext)
 
-      surface.blit(playernametext, (settings.statuswidth - width, self._statusMiddle - playernamesize[1]))
-      surface.blit(playerhptext, (settings.statuswidth - width, self._statusMiddle))
-      surface.blit(playermptext, (settings.statuswidth - width, self._statusMiddle + playermptextsize[1]))
+      hptext = self.font.render(hptext, False, colors.white)
+      mptext = self.font.render(mptext, False, colors.white)
+
+      width = max((hptextsize[0], mptextsize[0])) + 6
+
+      surface.blit(self.playername, (settings.statuswidth - self.playernamesize[0] - 6, self._statusMiddle - self.playernamesize[1]))
+      surface.blit(hptext, (settings.statuswidth - width, self._statusMiddle))
+      surface.blit(mptext, (settings.statuswidth - width, self._statusMiddle + mptextsize[1]))
+
+      # draw enemy's hp
+      hptext = "HP: " + str(self.enemy.curhp)
+      mptext = "MP: " + str(self.enemy.curmp)
+
+      hptextsize = self.font.size(hptext)
+      mptextsize = self.font.size(mptext)
+
+      hptext = self.font.render(hptext, False, colors.white)
+      mptext = self.font.render(mptext, False, colors.white)
+
+      surface.blit(self.enemyname, (6, self._statusMiddle - self.enemynamesize[1]))
+      surface.blit(hptext, (6, self._statusMiddle))
+      surface.blit(mptext, (6, self._statusMiddle + mptextsize[1]))

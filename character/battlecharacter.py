@@ -2,6 +2,8 @@ from playercharacter import PlayerCharacter
 from shared.load import load_character_data
 import equipment
 
+from strategy.strategem import Strategem
+
 class BattleCharacter(PlayerCharacter):
    @staticmethod
    def load(name, center=None):
@@ -19,5 +21,9 @@ class BattleCharacter(PlayerCharacter):
       
       bc.weapon = equipment.Weapon.load(jsonData['weapon'])
       bc.armor = equipment.Armor.load(jsonData['armor'])
+
+      bc.strategy = []
+      for strategem in jsonData['strategems']:
+         strategy = Strategem(strategem['action'], strategem['condition'])
 
       return bc

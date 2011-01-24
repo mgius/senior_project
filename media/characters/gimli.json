@@ -5,5 +5,11 @@
   "curhp" : 10,
   "curmp" : 8,
   "weapon" : "ironsword",
-  "armor" : "ironarmor"
+  "armor" : "ironarmor",
+  "strategems" : [ { "action" : 
+                        {"name" : "Attack"},
+                     "condition" : 
+                        {"name" : "Always" }
+                   }
+                 ]
 }
