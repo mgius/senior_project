@@ -22,31 +22,46 @@ At the moment, I'm taking advantage of SDL-image for GIF import
 purposes. I am not aware of any SDL version requirements.  As long as 
 PyGame installs, this game should work.
 
+# Controls
+Currently all controls are beta only, although I figured I'd document them
+anyway.
+
+## Overworld Screen
+* Arrow keys move your character.
+* 'n' activates the NPC trapped in the box
+* 'd' kills your player
+* 'u' revives your player
+* 'a' activates the worlds worst attack animation
+
+## Battle Screen
+Currently no interaction possible.
+
 # To Do List
 
 * Battle decision backend (simple version by Jan 25)
   * Example of both in-game implemented and python implemented
-  * In-game battle plan editor.
+     * This has changed to be JSON on disk or through the in-game editor
+     * Maybe write a basic Text UI for it?  (low priority)
+  * In-game battle plan editor. (Global Game Jam?)
 * Battles
   * Basic battle screen (By Jan 18)
   * Better battle animations
   * Spells
     * with less shitty animations
 * More sprites to choose from
-* In-game text overlay (status, menu, etc) (Something by Jan 18)
-  * Need a wrapper around text supporting following features
-    * Line wrapping
-    * Fetching text + surface from the same object
-    * Mostly line wrapping
+* Need a wrapper around text supporting following features
+  * Line wrapping
+  * Fetching text + surface from the same object
+  * Mostly line wrapping
 * Better maps (By Jan 18)
 * Better configuration
   * Python config file?
   * may not be worth it
-* "map file format"
-  * XML? JSON? Something else?
 * Rect support functions
   * Clamping/Stretching
   * Center-determining
+* BattleCharacter/BattleNPC are largely duplicated code.  Fix that
+* Characters need to be able to be dumped to disk, in human readable format
 
 # Bugs
 * Moving and "attacking" at the same kind causes...interesting results

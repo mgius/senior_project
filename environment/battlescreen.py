@@ -51,5 +51,5 @@ class Battlefield(Environment):
       if self._shouldFillBackground:
          self.fill_background(surface)
          #self.walls.draw(surface)
-      self.sprites.draw()
-      #self.statusBar.draw(surface)
+      self.sprites.draw(surface)
+      self.statusBar.draw(surface)

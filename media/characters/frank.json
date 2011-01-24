@@ -1,0 +1,15 @@
+{ "charactername" : "Frank",
+  "spritename" : "ftr1",
+  "maxhp" : 30,
+  "maxmp" : 0,
+  "curhp" : 30,
+  "curmp" : 0,
+  "weapon" : "ironsword",
+  "armor" : "ironarmor",
+  "strategems" : [ { "action" : 
+                        {"name" : "Attack"},
+                     "condition" : 
+                        {"name" : "Always" }
+                   }
+                 ]
+}

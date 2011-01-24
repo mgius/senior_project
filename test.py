@@ -6,7 +6,7 @@ from pygame.locals import *
 
 from character.battlecharacter import BattleCharacter
 
-from character.dumbnpc import DumbNPC
+from character.dumbbattlenpc import DumbBattleNPC
 
 from environment.overworld import Overworld
 from environment.battlescreen import Battlefield
@@ -52,11 +52,11 @@ jsonData = json.load(testOverworldFile)
 
 overworld = Overworld.fromJson(jsonData, man)
 
-npc = DumbNPC(center=(32 * 8 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
+npc = DumbBattleNPC.load("frank", center=(32 * 8 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
 
 overworld.addNPC(npc)
 
-npc = DumbNPC(center=(32 * 13 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
+npc = DumbBattleNPC.load("frank", center=(32 * 13 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
 
 overworld.addNPC(npc)
 
