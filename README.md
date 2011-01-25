@@ -45,7 +45,7 @@ Currently no interaction possible.
   * In-game battle plan editor. (Global Game Jam?)
 * Battles
   * Basic battle screen (By Jan 18)
-  * Better battle animations
+  * Better battle animations (GGJ?)
   * Spells
     * with less shitty animations
 * More sprites to choose from
@@ -62,6 +62,7 @@ Currently no interaction possible.
   * Center-determining
 * BattleCharacter/BattleNPC are largely duplicated code.  Fix that
 * Characters need to be able to be dumped to disk, in human readable format
+  * Needs to encompass the strategy dumping as well
 
 # Bugs
 * Moving and "attacking" at the same kind causes...interesting results
