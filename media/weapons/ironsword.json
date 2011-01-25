@@ -1,0 +1,5 @@
+{ "name" : "Iron Sword",
+  "lowdmg" : 1,
+  "highdmg" : 2,
+  "elem" : "none"
+}

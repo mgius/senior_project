@@ -1,13 +1,15 @@
 import settings
+import json
 
 import sys, pygame, time, os, math
 from pygame.locals import *
 
-from character.playercharacter import PlayerCharacter
+from character.battlecharacter import BattleCharacter
 
-from character.dumbnpc import DumbNPC
+from character.dumbbattlenpc import DumbBattleNPC
 
 from environment.overworld import Overworld
+from environment.battlescreen import Battlefield
 from environment.wall import Wall
 
 from battle import battleAnimation
@@ -18,18 +20,13 @@ from shared.load import load_sprite, load_tile
 
 pygame.init()
 
-screen = pygame.display.set_mode(settings.size)
+screen = pygame.display.set_mode(settings.totalsize)
 
 background = load_tile('green_grey.gif')
 
-man = PlayerCharacter(center=(32 * 10 + 16, 32 * 10 + 16))
+man = BattleCharacter.load("humantorch", center=(32 * 10 + 16, 32 * 10 + 16))
 
 clock = pygame.time.Clock()
-character = pygame.sprite.RenderUpdates((man))
-walls = pygame.sprite.RenderPlain()
-
-for x in range(128, 256, 32):
-   walls.add(Wall(load_tile("brown_wall_center.gif"), topleft=(x, 64)))
 
 #processEvents.downCount = 0
 
@@ -50,22 +47,52 @@ def processEvents():
             npc.startWalking()
       overworld.processEvent(event)
 
-for topleft in ((11,14),(11,13),(11,12),(12,12),(13,12),
-                (14,12),(15,12),(15,13),(15,14),(15,15),
-                (15,16),(14,16),(13,16),(12,16),(11,16),
-                (11,15)
-                ):
-   walls.add(Wall(load_tile("brown_wall_center.gif"), topleft=(topleft[0] * 32, topleft[1] * 32)))
-overworld = Overworld(background, character, screen, walls)
+testOverworldFile = open("media/maps/testArena.json")
+jsonData = json.load(testOverworldFile)
 
-npc = DumbNPC(center=(32 * 13 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
+overworld = Overworld.fromJson(jsonData, man)
+
+npc = DumbBattleNPC.load("mrfreeze", center=(32 * 8 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
 
 overworld.addNPC(npc)
+
+npc = DumbBattleNPC.load("mrfreeze", center=(32 * 13 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
+
+overworld.addNPC(npc)
+
 #overworld.fill_background()
 
+if not pygame.font.get_init():
+   print "Font rendering subsystem missing."
+
+isBattleAnimation = False
+isBattle = False
+battleAnim = None
+rgpevent = None
 while 1:
-   processEvents()
-   overworld.update()
-   overworld.draw()
-   pygame.display.flip()
    clock.tick(settings.fps)
+
+   if battleAnim is not None:
+      try:
+         battleAnim.next()
+      except StopIteration:
+         battleAnim = None
+         isBattle = True
+         battleScreen = Battlefield("red_silver.gif", rpgevent.player, rpgevent.opponents)
+
+   elif isBattle:
+      battleScreen.update()
+      battleScreen.draw(screen)
+
+   else:
+      processEvents()
+      rpgevent = overworld.update()
+      if rpgevent is not None:
+         # currently can only be BattleEvent
+         battleAnim = battleAnimation.slideRight(screen)
+         continue
+
+      overworld.draw(screen)
+
+   pygame.display.flip()
+

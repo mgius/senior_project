@@ -3,7 +3,23 @@ import settings
 from os import path
 from glob import iglob
 
+import json
 import pygame
+
+def load_json_data(filename):
+   jsonFile = open(filename + '.json')
+   jsonData = json.load(jsonFile)
+   jsonFile.close()
+   return jsonData
+
+def load_weapon_data(name):
+   return load_json_data(path.join(settings.weaponsdir, name))
+
+def load_armor_data(name):
+   return load_json_data(path.join(settings.armordir, name))
+
+def load_character_data(name):
+   return load_json_data(path.join(settings.characterdir, name))
 
 def load_sprites_glob(fileglob, colorkey=None):
    for filename in iglob(path.join(settings.spritedir, fileglob)):

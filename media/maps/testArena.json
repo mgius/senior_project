@@ -1,0 +1,32 @@
+{ "mapType" : "Overworld",
+  "locationName" : "Pit of Despair",
+  "backgroundTile" : "green_grey.gif",
+  "walls" : 
+     [
+      { "tile" : "brown_wall_center.gif",
+        "locations" : [[128, 64],
+                       [160, 64],
+                       [192, 64],
+                       [224, 64],
+                       [256, 64]]
+      },
+      { "tile" : "brown_wall_center.gif",
+        "locations" : [[352, 448],
+                       [352, 416],
+                       [352, 384],
+                       [384, 384],
+                       [416, 384],
+                       [448, 384],
+                       [480, 384],
+                       [480, 416],
+                       [480, 448],
+                       [480, 480],
+                       [480, 512],
+                       [448, 512],
+                       [416, 512],
+                       [384, 512],
+                       [352, 512],
+                       [352, 480]]
+      }
+   ]
+}

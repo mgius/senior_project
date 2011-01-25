@@ -1,0 +1,15 @@
+{ "charactername" : "The Human Torch",
+  "spritename" : "ftr1",
+  "maxhp" : 400,
+  "maxmp" : 15,
+  "curhp" : 400,
+  "curmp" : 15,
+  "weapon" : "firesword",
+  "armor" : "ironarmor",
+  "strategems" : [ { "action" : 
+                        {"name" : "Attack"},
+                     "condition" : 
+                        {"name" : "Always" }
+                   }
+                 ]
+}

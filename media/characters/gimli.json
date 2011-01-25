@@ -1,0 +1,15 @@
+{ "charactername" : "Gimli",
+  "spritename" : "ftr1",
+  "maxhp" : 12,
+  "maxmp" : 8,
+  "curhp" : 10,
+  "curmp" : 8,
+  "weapon" : "ironsword",
+  "armor" : "ironarmor",
+  "strategems" : [ { "action" : 
+                        {"name" : "Attack"},
+                     "condition" : 
+                        {"name" : "Always" }
+                   }
+                 ]
+}

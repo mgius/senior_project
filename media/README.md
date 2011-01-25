@@ -10,6 +10,12 @@ You are free to use them under the same license.
 Some sprites from Philipp have been modified slightly by Mark Gius, and are
 being redistributed under the terms of the original license.
 
-All tiles and the battle and death sprites were created by Mark Gius,
-and are licensed under the 
+Battle and Death sprites were created by Mark Gius and largely derived from
+Lenssen's originals.  They are distributed under the original license.
+
+All tiles were created by Mark Gius, and are licensed under the 
 [Creative Commons Attribution-NonCommercial][cc-by-nc-30] license.
+
+All other files are available under 
+[Creative Commons Attribution-NonCommercia][cc-by-nc-30] unless otherwise
+noted.
