@@ -1,0 +1,15 @@
+{ "charactername" : "Mr Freeze",
+  "spritename" : "ftr1",
+  "maxhp" : 1000,
+  "maxmp" : 100,
+  "curhp" : 1000,
+  "curmp" : 50,
+  "weapon" : "ironsword",
+  "armor" : "icearmor",
+  "strategems" : [ { "action" : 
+                        {"name" : "Attack"},
+                     "condition" : 
+                        {"name" : "Always" }
+                   }
+                 ]
+}

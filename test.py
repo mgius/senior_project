@@ -24,7 +24,7 @@ screen = pygame.display.set_mode(settings.totalsize)
 
 background = load_tile('green_grey.gif')
 
-man = BattleCharacter.load("gimli", center=(32 * 10 + 16, 32 * 10 + 16))
+man = BattleCharacter.load("humantorch", center=(32 * 10 + 16, 32 * 10 + 16))
 
 clock = pygame.time.Clock()
 
@@ -52,11 +52,11 @@ jsonData = json.load(testOverworldFile)
 
 overworld = Overworld.fromJson(jsonData, man)
 
-npc = DumbBattleNPC.load("frank", center=(32 * 8 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
+npc = DumbBattleNPC.load("mrfreeze", center=(32 * 8 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
 
 overworld.addNPC(npc)
 
-npc = DumbBattleNPC.load("frank", center=(32 * 13 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
+npc = DumbBattleNPC.load("mrfreeze", center=(32 * 13 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
 
 overworld.addNPC(npc)
 
@@ -73,7 +73,6 @@ while 1:
    clock.tick(settings.fps)
 
    if battleAnim is not None:
-      print "BattleAnim"
       try:
          battleAnim.next()
       except StopIteration:
@@ -89,10 +88,8 @@ while 1:
       processEvents()
       rpgevent = overworld.update()
       if rpgevent is not None:
-         print "Boo"
          # currently can only be BattleEvent
          battleAnim = battleAnimation.slideRight(screen)
-         print "battleAnim:", battleAnim
          continue
 
       overworld.draw(screen)

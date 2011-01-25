@@ -25,7 +25,7 @@ class DumbBattleNPC(DumbNPC):
 
       bc.strategy = []
       for strategem in jsonData['strategems']:
-         strategy = Strategem(strategem['action'], strategem['condition'])
+         bc.strategy.append(Strategem(strategem['action'], strategem['condition']))
 
       return bc
 

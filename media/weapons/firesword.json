@@ -1,0 +1,5 @@
+{ "name" : "Fire Sword",
+  "lowdmg" : 2,
+  "highdmg" : 10,
+  "elem" : "fire"
+}

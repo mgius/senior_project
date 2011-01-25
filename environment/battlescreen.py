@@ -34,17 +34,22 @@ class Battlefield(Environment):
 
       self.statusBar = BattlefieldStatus(self.player, self.enemy)
 
+      self.frameCount = settings.fps / 2
+
    def update(self):
-      # this is awful, I hate myself
-      #self.player.update()
-      #self.enemygroup.update()
-      #if sprite.spritecollideany(self.player, self.walls):
-      #   self.player._goback()
-      #for npc in sprite.groupcollide(self.enemygroup, self.walls, False, False):
-      #   npc._goback()
-      #if sprite.spritecollideany(self.player, self.enemygroup):
-      #   self.startBattleTransition()
-      pass
+      if self.frameCount > 0:
+         self.frameCount -= 1
+         return
+      # this should eventually become a part of the players
+      for strategem in self.player.strategy:
+         if strategem.condition.checkCondition(self.player, self.enemy):
+            strategem.action.doAction(self.player, self.enemy)
+            break
+      for strategem in self.enemy.strategy:
+         if strategem.condition.checkCondition(self.enemy, self.player):
+            strategem.action.doAction(self.enemy, self.player)
+            break
+      self.frameCount = settings.fps / 2
    
    def draw(self, surface):
       # TODO: shouldn't be reblitting when nothing has changed...probably

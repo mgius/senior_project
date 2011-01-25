@@ -1,7 +1,7 @@
 ''' Handles Displaying and storing status info for the battlefield '''
 import settings
 
-from pygame import font
+from pygame import font, Rect
 from shared import colors
 
 class BattlefieldStatus(object):
@@ -23,7 +23,10 @@ class BattlefieldStatus(object):
       self._statusMiddle = settings.statusheight / 2 + settings.mapheight
 
    # this function is a goddamn mess.  I need to organize this data far better
-   def draw(self,surface):
+   def draw(self, surface):
+      # eh
+
+      surface.fill(colors.black, rect=Rect((0, settings.mapheight), (settings.statussize)))
 
       # draw player's hp
       hptext = "HP: " + str(self.player.curhp)

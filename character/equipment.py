@@ -15,7 +15,9 @@ class Weapon(object):
                     jsonData['highdmg'], jsonData['elem'])
 
    def getDamage(self):
-      return random.randint(lowdmg, highdmg)
+      damage = random.randint(self.lowdmg, self.highdmg)
+      print "DEBUG: %s damages for %d" % (self.name, damage)
+      return damage
 
    def __repr__(self):
       out = (self.name, self.lowdmg, self.highdmg, self.elem)
@@ -37,7 +39,9 @@ class Armor(object):
                    jsonData['highred'], jsonData['elem'])
 
    def getDamageReduction(self):
-      return random.randint(lowred, highred)
+      reduction = random.randint(self.lowred, self.highred)
+      print "DEBUG: %s damages for %d" % (self.name, reduction)
+      return reduction
 
    def __repr__(self):
       out = (self.name, self.lowred, self.highred, self.elem)
