@@ -77,11 +77,15 @@ class Overworld(Environment):
          npc._goback()
       npcCollisions = sprite.spritecollide(self.player, self.npcgroup, False)
       if len(npcCollisions) > 0:
-         self.sprites.remove(npcCollisions[0])
-         self.npcgroup.remove(npcCollisions[0])
+         self.prepareForBattle()
          return BattleEvent(self.player, npcCollisions[0])
       return None
          
+   def prepareForBattle(self):
+      self.player.prepareForBattle()
+
+   def returnFromBattle(self):
+      self.player.returnFromBattle()
    
    def draw(self, surface):
       # TODO: shouldn't be reblitting when nothing has changed...probably

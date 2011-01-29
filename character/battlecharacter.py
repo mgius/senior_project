@@ -21,3 +21,24 @@ class BattleCharacter(Character):
       self.strategy = []
       for strategem in jsonData['strategems']:
          self.strategy.append(Strategem(strategem['action'], strategem['condition']))
+
+   def prepareForBattle(self):
+      ''' Backs up certain attributes that are going to be changed 
+          during the battle
+      '''
+      self._goback()
+      self.backuprect = self.rect.copy()
+      self.backupdirection = self.curDirection
+      self.backupanim = self.curAnim
+      self.backupimage = self.image
+
+   def returnFromBattle(self):
+      self.rect = self.backuprect
+      del self.backuprect
+      self.curDirection = self.backupdirection
+      del self.backupdirection
+      self.curAnim = self.backupanim
+      del self.backupanim
+      self.image = self.backupimage
+      del self.backupimage
+

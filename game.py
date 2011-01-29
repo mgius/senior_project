@@ -91,6 +91,7 @@ while 1:
          if status:
             print "Players Win!"
             isBattle = False
+            overworld.returnFromBattle()
             overworld.fulldraw(screen)
          else:
             print "Players Lose!"
