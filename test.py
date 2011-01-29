@@ -53,11 +53,18 @@ jsonData = json.load(testOverworldFile)
 overworld = Overworld.fromJson(jsonData, man)
 
 npc = DumbBattleNPC.load("mrfreeze", center=(32 * 8 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
+overworld.addNPC(npc)
 
+npc = DumbBattleNPC.load("mrfreeze", center=(32 * 7 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
+overworld.addNPC(npc)
+
+npc = DumbBattleNPC.load("mrfreeze", center=(32 * 6 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
+overworld.addNPC(npc)
+
+npc = DumbBattleNPC.load("mrfreeze", center=(32 * 5 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
 overworld.addNPC(npc)
 
 npc = DumbBattleNPC.load("mrfreeze", center=(32 * 13 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
-
 overworld.addNPC(npc)
 
 #overworld.fill_background()
@@ -81,7 +88,16 @@ while 1:
          battleScreen = Battlefield("red_silver.gif", rpgevent.player, rpgevent.opponents)
 
    elif isBattle:
-      battleScreen.update()
+      status = battleScreen.update()
+      if status is not None:
+         if status:
+            print "Players Win!"
+            isBattle = False
+            overworld.fulldraw(screen)
+         else:
+            print "Players Lose!"
+            sys.exit(0)
+
       battleScreen.draw(screen)
 
    else:

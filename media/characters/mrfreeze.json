@@ -2,8 +2,9 @@
   "spritename" : "ftr1",
   "maxhp" : 1000,
   "maxmp" : 100,
-  "curhp" : 1000,
+  "curhp" : 100,
   "curmp" : 50,
+  "speed" : 5,
   "weapon" : "ironsword",
   "armor" : "icearmor",
   "strategems" : [ { "action" : 

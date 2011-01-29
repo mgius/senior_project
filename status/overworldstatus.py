@@ -1,7 +1,7 @@
 ''' Handles Displaying and storing status info for the overworld '''
 import settings
 
-from pygame import font
+from pygame import font, Rect
 from shared import colors
 
 class OverWorldStatus(object):
@@ -19,6 +19,8 @@ class OverWorldStatus(object):
       self._statusMiddle = settings.statusheight / 2 + settings.mapheight
 
    def draw(self, surface):
+      surface.fill(colors.black, rect=Rect((0, settings.mapheight), (settings.statussize)))
+
       locationtext = self.font.render(self.location, False, colors.white)
       surface.blit(locationtext, (32, self._statusMiddle))
 

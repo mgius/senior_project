@@ -11,6 +11,8 @@ class BattleCharacter(Character):
       self.curhp = jsonData['curhp']
       self.maxmp = jsonData['maxmp']
       self.curmp = jsonData['curmp']
+
+      self.speed = jsonData['speed']
       
       self.weapon = equipment.Weapon.load(jsonData['weapon'])
       self.armor = equipment.Armor.load(jsonData['armor'])

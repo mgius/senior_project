@@ -42,7 +42,7 @@ class Character(pygame.sprite.Sprite):
       self.battleStance = load_sprite(spritename + '_battle.gif', -1)
       self.deadStance = load_sprite(spritename + '_dead.gif', -1)
 
-      self.speed = [0,0]
+      self.walkingSpeed = [0,0]
       self.walkingRate = settings.fps / 10 # frames between steps
       self.walkingCount = self.walkingRate # frames until next step
       self.curDirection = None
@@ -67,23 +67,23 @@ class Character(pygame.sprite.Sprite):
       #print "DEBUG: direction: %d" % direction
       if direction == Direction.LEFT:
          self.curAnim = self.lfWalk
-         self.speed = [-4, 0]
+         self.walkingSpeed = [-4, 0]
       elif direction == Direction.FRONT:
          self.curAnim = self.frWalk
-         self.speed = [0, 4]
+         self.walkingSpeed = [0, 4]
       elif direction == Direction.RIGHT:
          self.curAnim = self.rtWalk
-         self.speed = [4, 0]
+         self.walkingSpeed = [4, 0]
       elif direction == Direction.BACK:
          self.curAnim = self.bkWalk
-         self.speed = [0, -4]
+         self.walkingSpeed = [0, -4]
 
       self.image = self.curAnim.next()
       # Force a frame update
       self.walkingCount = self.walkingRate
 
    def _walkingAnimation(self):
-      self.rect.move_ip(self.speed)
+      self.rect.move_ip(self.walkingSpeed)
 
       if self.walkingCount >= self.walkingRate:
          self.walkingCount = 0
@@ -113,7 +113,7 @@ class Character(pygame.sprite.Sprite):
       self._walkingAnimation()
 
    def _goback(self):
-      self.rect.move_ip(-self.speed[0], -self.speed[1])
+      self.rect.move_ip(-self.walkingSpeed[0], -self.walkingSpeed[1])
 
    def update(self):
       raise NotImplementedError, "This must be implemented by subclass"

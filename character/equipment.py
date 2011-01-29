@@ -40,7 +40,7 @@ class Armor(object):
 
    def getDamageReduction(self):
       reduction = random.randint(self.lowred, self.highred)
-      print "DEBUG: %s damages for %d" % (self.name, reduction)
+      print "DEBUG: %s protects for %d" % (self.name, reduction)
       return reduction
 
    def __repr__(self):

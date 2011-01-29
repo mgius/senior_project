@@ -4,6 +4,7 @@
   "maxmp" : 0,
   "curhp" : 30,
   "curmp" : 0,
+  "speed" : 5,
   "weapon" : "ironsword",
   "armor" : "ironarmor",
   "strategems" : [ { "action" : 
