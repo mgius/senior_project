@@ -2,9 +2,7 @@
 import settings
 import pygame
 
-from collections import deque
 from shared.cycle import cycle
-from glob import iglob
 
 from shared.direction import Direction
 from shared.load import load_sprites_glob, load_sprite
@@ -118,12 +116,7 @@ class Character(pygame.sprite.Sprite):
       self.rect.move_ip(-self.speed[0], -self.speed[1])
 
    def update(self):
-      if self.isDead:
-         return
-      if self.isAttacking:
-         self._attack()
-      if self.isWalking:
-         self._walk()
+      raise NotImplementedError, "This must be implemented by subclass"
 
    def _die(self):
       self.isDead = True
@@ -135,12 +128,14 @@ class Character(pygame.sprite.Sprite):
       self.image = self.battleStance
       self.curDirection = None
 
+   # deprecated
    def startAttack(self):
       if not self.isAttacking and not self.isDead:
          self.attackFramesLeft = settings.fps / 3
          self.isAttacking = True
          self.image = self.battleStance
 
+   # deprecated
    def _attack(self):
       if self.attackFramesLeft > (settings.fps / 6):
          self.rect.move_ip((-1, 0))

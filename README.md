@@ -38,13 +38,12 @@ Currently no interaction possible.
 
 # To Do List
 
-* Battle decision backend (simple version by Jan 25)
+* Battle decision backend 
   * Example of both in-game implemented and python implemented
      * This has changed to be JSON on disk or through the in-game editor
      * Maybe write a basic Text UI for it?  (low priority)
   * In-game battle plan editor. (Global Game Jam?)
 * Battles
-  * Basic battle screen (By Jan 18)
   * Better battle animations (GGJ?)
   * Spells
     * with less shitty animations
@@ -53,14 +52,9 @@ Currently no interaction possible.
   * Line wrapping
   * Fetching text + surface from the same object
   * Mostly line wrapping
-* Better maps (By Jan 18)
-* Better configuration
-  * Python config file?
-  * may not be worth it
 * Rect support functions
   * Clamping/Stretching
   * Center-determining
-* BattleCharacter/BattleNPC are largely duplicated code.  Fix that
 * Characters need to be able to be dumped to disk, in human readable format
   * Needs to encompass the strategy dumping as well
 

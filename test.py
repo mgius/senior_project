@@ -4,7 +4,7 @@ import json
 import sys, pygame, time, os, math
 from pygame.locals import *
 
-from character.battlecharacter import BattleCharacter
+from character.playerbattlecharacter import PlayerBattleCharacter
 
 from character.dumbbattlenpc import DumbBattleNPC
 
@@ -24,7 +24,7 @@ screen = pygame.display.set_mode(settings.totalsize)
 
 background = load_tile('green_grey.gif')
 
-man = BattleCharacter.load("humantorch", center=(32 * 10 + 16, 32 * 10 + 16))
+man = PlayerBattleCharacter.load("humantorch", center=(32 * 10 + 16, 32 * 10 + 16))
 
 clock = pygame.time.Clock()
 

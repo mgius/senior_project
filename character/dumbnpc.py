@@ -2,19 +2,14 @@
 import settings
 import pygame
 
-from collections import deque
-from itertools import cycle
-from glob import iglob
 import random
 
 # TODO: Move readWalklingAnimations somewhere else
-from character import Character, readWalkingAnimations
+from character import Character
 from shared.direction import Direction
-from shared.load import load_sprites_glob, load_sprite
 
 class DumbNPC(Character):
-   def __init__(self, center=None, spritename='ftr1', walkDelay=0):
-      Character.__init__(self, center, spritename)
+   def __init__(self, walkDelay=settings.fps):
       # frames to wait before choosing a new direction
       self.walkDelay = walkDelay
       self.toWait = walkDelay
@@ -50,7 +45,6 @@ class DumbNPC(Character):
             return
 
       self._walkingAnimation()
-
 
    def update(self):
       if self.isDead:

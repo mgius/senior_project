@@ -3,18 +3,14 @@ import settings
 import pygame
 
 from collections import deque
-from itertools import cycle
-from glob import iglob
 
 from character import Character
 
 from shared.direction import Direction
-from shared.load import load_sprites_glob, load_sprite
 
 class PlayerCharacter(Character):
-   def __init__(self, center=None, spritename='ftr1'):
-      Character.__init__(self, center, spritename)
-
+   ''' Sets up movement rules for a player controlled character '''
+   def __init__(self):
       self.directionQueue = deque()
       self.directionBitSet = 0
 
@@ -53,3 +49,9 @@ class PlayerCharacter(Character):
                   break;
       # finally, trigger the walking animation
       self._walkingAnimation()
+
+   def update(self):
+      if self.isDead:
+         return
+      if self.isWalking:
+         self._walk()
