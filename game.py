@@ -39,8 +39,6 @@ def processEvents():
             sys.exit(0)
          elif event.key == K_q:
             sys.exit(0)
-         elif event.key == K_t:
-            battleAnimation.slideRight(screen)
          elif event.key == K_n and event.key == K_LSHIFT or event.key == K_RSHIFT:
             npc.stopWalking()
          elif event.key == K_n:
@@ -105,7 +103,7 @@ while 1:
       rpgevent = overworld.update()
       if rpgevent is not None:
          # currently can only be BattleEvent
-         battleAnim = battleAnimation.slideRight(screen)
+         battleAnim = battleAnimation.randomAnimation()(screen)
          continue
 
       overworld.draw(screen)
