@@ -4,9 +4,8 @@ import json
 import sys, pygame, time, os, math
 from pygame.locals import *
 
-from character.playerbattlecharacter import PlayerBattleCharacter
-
-from character.dumbbattlenpc import DumbBattleNPC
+from character.playercharactertypes import load_player
+from character.nonplayercharactertypes import load_monster
 
 from environment.overworld import Overworld
 from environment.battlescreen import Battlefield
@@ -24,7 +23,7 @@ screen = pygame.display.set_mode(settings.totalsize)
 
 background = load_tile('green_grey.gif')
 
-man = PlayerBattleCharacter.load("humantorch", center=(32 * 10 + 16, 32 * 10 + 16))
+man = load_player("humantorch", center=(32 * 10 + 16, 32 * 10 + 16))
 
 clock = pygame.time.Clock()
 
@@ -50,20 +49,14 @@ jsonData = json.load(testOverworldFile)
 
 overworld = Overworld.fromJson(jsonData, man)
 
-npc = DumbBattleNPC.load("mrfreeze", center=(32 * 8 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
-overworld.addNPC(npc)
-
-npc = DumbBattleNPC.load("mrfreeze", center=(32 * 7 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
-overworld.addNPC(npc)
-
-npc = DumbBattleNPC.load("mrfreeze", center=(32 * 6 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
-overworld.addNPC(npc)
-
-npc = DumbBattleNPC.load("mrfreeze", center=(32 * 5 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
-overworld.addNPC(npc)
-
-npc = DumbBattleNPC.load("mrfreeze", center=(32 * 13 + 16, 32 * 14 + 16), walkDelay=settings.fps/2)
-overworld.addNPC(npc)
+#npc = load_monster("mrfreeze", center=(32 * 8 + 16, 32 * 14 + 16))
+#overworld.addNPC(npc)
+#
+#npc = load_monster("freezecluster", center=(32 * 7 + 16, 32 * 14 + 16))
+#overworld.addNPC(npc)
+#
+#npc = DumbBattleNPC.load("mrfreeze", center=(32 * 6 + 16, 32 * 14 + 16))
+#overworld.addNPC(npc)
 
 #overworld.fill_background()
 

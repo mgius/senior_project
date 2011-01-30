@@ -4,46 +4,53 @@ from pygame import Rect
 from pygame import sprite
 from pygame.locals import *
 
-from collections import namedtuple
 from environment import Environment
 
 from operator import itemgetter
 
 from shared.direction import Direction
-from shared.colors import black
 
 from status.battlestatus import BattlefieldStatus
+
+from character.character import BattleGroup
 
 class Battlefield(Environment):
    def __init__(self, background, player, enemy):
       Environment.__init__(self, background)
-      self.players = sprite.Group(player)
-      self.enemies = sprite.Group(enemy)
+      self.player = player
+      self.enemy = enemy
+      if isinstance(player, BattleGroup):
+         self.players = sprite.Group(player.groupmembers)
+      else:
+         self.players = sprite.Group(player)
+      if isinstance(enemy, BattleGroup):
+         self.enemies = sprite.Group(enemy.groupmembers)
+      else:
+         self.enemies = sprite.Group(enemy)
+
       self.sprites = sprite.RenderUpdates(self.players, self.enemies)
       self.combatants = sprite.Group(self.players, self.enemies)
 
-      # stop the player and make him turn left
-      for player in self.players:
-          player.stopWalking(player.curDirection)
-          player._setwalkingdirection(Direction.LEFT)
-          player.stopWalking(player.curDirection)
-          # TODO: Line them up
-          player.rect.center = (608 - 16, 320 + 16)
-
-      # stop the npc and make him turn right
-      for player in self.enemies:
-          enemy.stopWalking(enemy.curDirection)
-          enemy._setwalkingdirection(Direction.RIGHT)
-          enemy.stopWalking(enemy.curDirection)
-          # TODO: Line them up
-          enemy.rect.center = (32 + 16, 320 + 16)
-
+      self.alignCombatants(self.players, 608 - 16, Direction.LEFT)
+      self.alignCombatants(self.enemies, 32 + 16, Direction.RIGHT)
+      
+      # TODO: Battlefield status needs to be updated
       self.statusBar = BattlefieldStatus(self.players.sprites()[0], self.enemies.sprites()[0])
 
       self.frameCount = settings.fps / 2
 
       self.battleQueue = [ (c.speed, c) for c in self.combatants ]
       self.battleQueue.sort(key=itemgetter(0))
+
+   @staticmethod
+   def alignCombatants(combatants, xPos, direction):
+      yPos = settings.mapheight / 2 - 32 * len(combatants)
+      for combatant in combatants:
+          combatant.stopWalking(combatant.curDirection)
+          combatant._setwalkingdirection(direction)
+          combatant.stopWalking(combatant.curDirection)
+          combatant.rect.center = (xPos + 16, yPos + 16)
+          yPos += 64
 
    def update(self):
       if self.frameCount > 0:
@@ -68,6 +75,7 @@ class Battlefield(Environment):
          target.kill()
          if not self.enemies:
             # player wins, return True
+            self.enemy.kill()
             return True
          if not self.players:
             return False

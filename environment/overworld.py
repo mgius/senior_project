@@ -4,6 +4,8 @@ from pygame import Rect
 from pygame import sprite
 from pygame.locals import *
 
+from character.nonplayercharactertypes import load_monster
+
 from environment import Environment
 
 from event import BattleEvent
@@ -21,7 +23,6 @@ class Overworld(Environment):
       self.player = player
       self.playergroup = sprite.GroupSingle(player)
       self.walls = sprite.RenderPlain(walls)
-      self.__battleAnimShifted = 0
       self.npcgroup = sprite.Group()
 
       self.sprites = sprite.RenderUpdates()
@@ -34,7 +35,15 @@ class Overworld(Environment):
       backgroundTile = jsonData["backgroundTile"]
       walls = Wall.fromJson(jsonData["walls"])
       location = jsonData["locationName"]
-      return Overworld(backgroundTile, player, location, walls)
+      ov =  Overworld(backgroundTile, player, location, walls)
+
+      for monster in jsonData['monsters']:
+         center = (monster['location'][0] * 32 + 16,
+                   monster['location'][1] * 32 + 16)
+         ov.addNPC(load_monster(monster['name'], center=center))
+
+      return ov
+
 
    def addNPC(self, npc):
       self.npcgroup.add(npc)

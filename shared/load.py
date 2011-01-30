@@ -21,6 +21,12 @@ def load_armor_data(name):
 def load_character_data(name):
    return load_json_data(path.join(settings.characterdir, name))
 
+def load_monster_data(name):
+   return load_json_data(path.join(settings.monsterdir, name))
+
+def load_monstergroup_data(name):
+   return load_json_data(path.join(settings.monstergroupdir, name))
+
 def load_sprites_glob(fileglob, colorkey=None):
    for filename in iglob(path.join(settings.spritedir, fileglob)):
       yield load_sprite(path.basename(filename), -1)

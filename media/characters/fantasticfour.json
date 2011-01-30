@@ -1,0 +1,6 @@
+{ "charactertype" : "BattleablePlayerCharacterGroup",
+  "displayname" : "The Fantastic Four",
+  "spritename" : "ftr1",
+  "members" : [ "humantorch", "thething", "mrfantastic", "invisiblewoman" ]
+}
+

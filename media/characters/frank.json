@@ -1,4 +1,5 @@
-{ "charactername" : "Frank",
+{ "charactertype" : "BattleablePlayerCharacter",
+  "charactername" : "Frank",
   "spritename" : "ftr1",
   "maxhp" : 30,
   "maxmp" : 0,

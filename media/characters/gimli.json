@@ -1,4 +1,5 @@
-{ "charactername" : "Gimli",
+{ "charactertype" : "BattleablePlayerCharacter",
+  "charactername" : "Gimli",
   "spritename" : "ftr1",
   "maxhp" : 12,
   "maxmp" : 8,
