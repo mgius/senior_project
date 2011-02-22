@@ -1,0 +1,15 @@
+{ "monstertype" : "BattleableNonPlayerCharacter",
+  "charactername" : "Imp",
+  "spritename" : "ftr1",
+  "maxhp" : 1000,
+  "maxmp" : 100,
+  "speed" : 6,
+  "weapon" : "ironsword",
+  "armor" : "ironarmor",
+  "strategems" : [ { "action" : 
+                        {"name" : "Attack"},
+                     "condition" : 
+                        {"name" : "Always" }
+                   }
+                 ]
+}

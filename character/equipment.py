@@ -16,7 +16,7 @@ class Weapon(object):
 
    def getDamage(self):
       damage = random.randint(self.lowdmg, self.highdmg)
-      print "DEBUG: %s damages for %d" % (self.name, damage)
+#      print "DEBUG: %s damages for %d" % (self.name, damage)
       return damage
 
    def __repr__(self):
@@ -40,7 +40,7 @@ class Armor(object):
 
    def getDamageReduction(self):
       reduction = random.randint(self.lowred, self.highred)
-      print "DEBUG: %s protects for %d" % (self.name, reduction)
+#      print "DEBUG: %s protects for %d" % (self.name, reduction)
       return reduction
 
    def __repr__(self):

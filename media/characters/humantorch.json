@@ -8,7 +8,15 @@
   "speed" : 5,
   "weapon" : "firesword",
   "armor" : "ironarmor",
-  "strategems" : [ { "action" : 
+  "strategems" : [ {
+                     "action" : 
+                        {"name" : "Attack"},
+                     "condition" : 
+                        {"name" : "WeakAgainst",
+                         "targetElement" : "fire" }
+                   },
+                   { 
+                     "action" : 
                         {"name" : "Attack"},
                      "condition" : 
                         {"name" : "Always" }
