@@ -12,6 +12,9 @@ def load_json_data(filename):
    jsonFile.close()
    return jsonData
 
+def load_spell_data(name):
+   return load_json_data(path.join(settings.spellsdir, name))
+
 def load_weapon_data(name):
    return load_json_data(path.join(settings.weaponsdir, name))
 

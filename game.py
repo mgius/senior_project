@@ -38,27 +38,12 @@ def processEvents():
             sys.exit(0)
          elif event.key == K_q:
             sys.exit(0)
-         elif event.key == K_n and event.key == K_LSHIFT or event.key == K_RSHIFT:
-            npc.stopWalking()
-         elif event.key == K_n:
-            npc.startWalking()
       overworld.processEvent(event)
 
 testOverworldFile = open("media/maps/testArena.json")
 jsonData = json.load(testOverworldFile)
 
 overworld = Overworld.fromJson(jsonData, man)
-
-#npc = load_monster("mrfreeze", center=(32 * 8 + 16, 32 * 14 + 16))
-#overworld.addNPC(npc)
-#
-#npc = load_monster("freezecluster", center=(32 * 7 + 16, 32 * 14 + 16))
-#overworld.addNPC(npc)
-#
-#npc = DumbBattleNPC.load("mrfreeze", center=(32 * 6 + 16, 32 * 14 + 16))
-#overworld.addNPC(npc)
-
-#overworld.fill_background()
 
 if not pygame.font.get_init():
    print "Font rendering subsystem missing."

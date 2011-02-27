@@ -1,0 +1,6 @@
+{"name" : "fire",
+ "mpCost" : 5,
+ "lowDmg" : 10,
+ "highDmg" : 50,
+ "elem" : "fire"
+}

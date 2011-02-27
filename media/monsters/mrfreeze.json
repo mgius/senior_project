@@ -1,7 +1,7 @@
 { "monstertype" : "BattleableNonPlayerCharacter",
   "charactername" : "Mr Freeze",
   "spritename" : "ftr1",
-  "maxhp" : 100,
+  "maxhp" : 50,
   "maxmp" : 100,
   "speed" : 5,
   "weapon" : "ironsword",

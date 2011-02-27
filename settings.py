@@ -1,6 +1,7 @@
 from os import path
 # filepaths
 mediadir = 'media'
+spellsdir = path.join(mediadir, 'spells')
 spritedir = path.join(mediadir, 'sprites')
 tilesdir = path.join(mediadir, 'tiles')
 weaponsdir = path.join(mediadir, 'weapons')

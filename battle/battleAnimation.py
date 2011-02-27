@@ -13,7 +13,7 @@ from shared.colors import black
 def randomAnimation():
    return random.choice(animations)
 
-def _horizSlide(surface, dx=None, slideTime=2, distance=settings.mapwidth):
+def _horizSlide(surface, dx=None, slideTime=1, distance=settings.mapwidth):
    if dx is None:
       dx = settings.mapwidth / (slideTime * settings.fps)
 

@@ -87,6 +87,7 @@ class Overworld(Environment):
       npcCollisions = sprite.spritecollide(self.player, self.npcgroup, False)
       if len(npcCollisions) > 0:
          self.prepareForBattle()
+         npcCollisions[0].kill()
          return BattleEvent(self.player, npcCollisions[0])
       return None
          

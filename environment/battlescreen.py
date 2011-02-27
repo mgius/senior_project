@@ -58,6 +58,9 @@ class Battlefield(Environment):
          return
 
       (curTime, character) = self.battleQueue.pop(0)
+      while character not in self.players and character not in self.enemies:
+         (curTime, character) = self.battleQueue.pop(0)
+
       # temporary hack
       if character in self.players:
          targets = self.enemies.sprites()
@@ -79,6 +82,8 @@ class Battlefield(Environment):
             return True
          if not self.players:
             return False
+
+         self.statusBar = BattlefieldStatus(self.players.sprites()[0], self.enemies.sprites()[0])
 
       self.battleQueue.append((curTime + character.speed, character))
       self.battleQueue.sort(key=itemgetter(0))
