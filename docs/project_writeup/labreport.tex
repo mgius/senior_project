@@ -39,7 +39,19 @@ There are several other games that feature similar gameplay mechanics.
 %What other solutions have been proposed or implemented for this problem? Why are they not good enough? You must prepare the readers to believe that your solution (which you have not yet said anything about) is better than these other attempts. This is also the section where you describe any work that your solution is built on top of. Include references to relevant related work.
 
 \section{Implementation}
-\subsection{User Point of View}
+
+A simple prototype game was developed in Python using the PyGame game development framework.  The game supported a simple frontend to visualize the more interesting backend action. The game features a battle system that completely disallows user interaction, instead forcing the user to develop pre-defined strategies ahead of time.
+
+\subsection{Frontend}
+
+The frontend largely serves to display the information for the battle.  It serves a secondary purpose of allowing future development to occur on the 
+
+\subsection{Battle Backend}
+
+The battle backend serves primarily as a stimuli-response system.  Characters take turns deciding a course of action and performing that action.  All possible actions are predefined as Python Classes.  Actions include a simple Attack or Spells.  Armor can be used to reduce damage from weapons, and elemental attributes can be used to reduce or increase the potential damage.  
+
+Conditions are somewhat more flexible.  In theory, any attribute of a player or enemy can be examined to determine whether an action should be taken.  These can be as simple as choosing the enemy with the least hit points remaining to complicated queries designed to strike the enemy most likely to cause the most damage.
+
 %(a) Overview of Solution. Describe in broad terms your project and solution
 %(b) Main Algorithm or Interesting Details. Either describe the main algorithm in your project or if appropriate, Pick some of the key areas of your project that you are particularly proud of (that were either complex or tricky or just the most interesting to you). Describe in detail your solution to these aspects of your overall problem. Think about someone else trying to implement what you just did, what information would be most useful for them?
 
@@ -47,6 +59,10 @@ There are several other games that feature similar gameplay mechanics.
 %Describe your results. Please include at least 3-6 screen shots of your results, which highlight the capabilities of your project.
 
 \section{Future Work}
+
+Future endeavors should probably be directed towards modifying existing games, rather than continuing work on a from-scratch game.  Most RPG type games probably feature a very structured set of actions and character interactions.  Adding on a structured stimuli-response system similar to what has been prototyped here would be a relatively simple task.
+
+Once the backend has been put in place, competitions could be formed around the system, such as those often associated with RoboCode.  Player vs Player would be tricky to set up.  Player vs. Computer situations would be much easier to establish and regulate.  Categories such as least moves to win against pregenerated opponents would have people optimizing their strategies well. 
 
 %What is the next stage? What didn't you get done that you should have? Now that you're done, what should the next person do to carry on the project? Frequently senior projects are a portion of a larger project, and you have to make sure that your work is understandable by the next person to work on the project.
 
