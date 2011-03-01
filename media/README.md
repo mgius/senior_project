@@ -17,5 +17,5 @@ All tiles were created by Mark Gius, and are licensed under the
 [Creative Commons Attribution-NonCommercial][cc-by-nc-30] license.
 
 All other files are available under 
-[Creative Commons Attribution-NonCommercia][cc-by-nc-30] unless otherwise
+[Creative Commons Attribution-NonCommercial][cc-by-nc-30] unless otherwise
 noted.
