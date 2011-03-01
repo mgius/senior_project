@@ -1,3 +1,21 @@
+# AutoRPG
+A (very) simple RPG style game with programmable strategies in place of 
+manual user control.
+
+Games today are placing emphasis on twitch reflexes and on-the-fly 
+decision making.  But what if you couldn't react quickly to new situations?
+What if you had to prepare for them beforehand?
+
+AutoRPG forces the player to define their battle strategies beforehand,
+forcing the player to think about their situation and plan for all
+situations beforehand.
+
+## Strategies
+
+Strategies are defined as sets of condition/response pairs. Players define a
+condition, such as low HP or an enemy on the brink on death, and choose an
+action to take when that condition evaluates to true.  
+
 # Dependencies
 
 ## Python
@@ -60,3 +78,5 @@ Currently no interaction possible.
 
 # Bugs
 * Moving and "attacking" at the same kind causes...interesting results
+  * somewhat irrelevant considering that "attack" needs to be removed
+    from that context anyway
