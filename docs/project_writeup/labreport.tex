@@ -46,6 +46,10 @@ A simple prototype game was developed in Python using the PyGame game developmen
 
 The frontend largely serves to display the information for the battle.  It serves a secondary purpose of allowing future development to occur on the 
 
+\subsubsection{Block Based Movement}
+
+In most SNES era RPG games, player characters moved about the overworld in discrete steps as though the world was divided into a grid.  A single press of any direction would cause movement until the player was fully contained in the next block created by the grid.  I wanted to recreate this behavior for the simple overworld screen.
+
 \subsection{Battle Backend}
 
 The battle backend serves primarily as a stimuli-response system.  Characters take turns deciding a course of action and performing that action.  All possible actions are predefined as Python Classes.  Actions include a simple Attack or Spells.  Armor can be used to reduce damage from weapons, and elemental attributes can be used to reduce or increase the potential damage.  
