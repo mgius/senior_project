@@ -6,6 +6,11 @@ class Action(object):
    def __init__(self, extradata):
       pass
 
+   def __repr__(self):
+      return "Generic Action"
+   def __str__(self):
+      return __repr__(self)
+
    def canDoAction(self, attacker, defender):
       return True
 
@@ -14,25 +19,39 @@ class Action(object):
    pass
 
 class CastSpell(Action):
-   def __init__(self, extradata)
+   def __init__(self, extradata):
       self.spellname = extradata['spellname']
-      self.spell = load_spell_data(spellname)
-      self.lowdmg = self.spell['lowdmg']
-      self.highdmg = self.spell['highdmg']
-      self.mpCost = self.spell['mpCost']
-      self.elem = self.spell['elem']
+      self.spell = None
+      self.lastAttacker = None
+
+   def __repr__(self):
+      return "Cast Spell %s" % self.spellname
+
    def canDoAction(self, attacker, defender):
-      return self.attacker.curmp >= self.mpCost
+      if self.lastAttacker is not attacker or self.spell is None:
+         self.spell = None
+         for spell in attacker.spellbook:
+            if spell.name == self.spellname:
+               self.spell = spell
+               break
+         if self.spell is None:
+            return False
+
+      print "About to do Spell"
+      return attacker.curmp >= self.spell.mpcost
    
    def doAction(self, attacker, defender):
-      damage = random.randint(self.lowdmg, self.highdmg)
-      if element.isWeak(self.elem, defender.armor.elem):
+      damage = self.spell.getDamage()
+      if element.isWeak(self.spell.elem, defender.armor.elem):
          damage *= 2
       defender.curhp -= damage
-      attacker.curmp -= self.mpCost
-      print "DEBUG: %s damages %s for %d damage" % (attacker.charactername, defender.charactername, damage)
+      attacker.curmp -= self.spell.mpcost
+      print "DEBUG: %s damages %s with %s for %d damage" % (attacker.charactername, defender.charactername, self.spellname, damage)
 
 class Attack(Action):
+   def __repr__(self):
+      return "Attack Action"
+
    def doAction(self, attacker, defender):
       damage = attacker.weapon.getDamage()
       reduction = defender.armor.getDamageReduction()

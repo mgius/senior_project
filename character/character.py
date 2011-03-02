@@ -4,6 +4,7 @@ import pygame
 import random
 
 import equipment
+import magic
 
 from collections import deque
 
@@ -62,6 +63,12 @@ class Character(pygame.sprite.Sprite):
       self.rect = self.image.get_rect()
       if center is not None:
          self.rect.center = center
+
+   def __repr__(self):
+      return self.charactername
+
+   def __str__(self):
+      return self.charactername
 
    def startWalking(self, direction):
       raise NotImplementedError, "This must be implemented by subclass"
@@ -223,6 +230,13 @@ class BattleableCharacter(Character):
       
       self.weapon = equipment.Weapon.load(jsonData['weapon'])
       self.armor = equipment.Armor.load(jsonData['armor'])
+
+      self.spellbook = []
+      try:
+         for spell in jsonData['spellbook']:
+            self.spellbook.append(magic.Spell.load(spell))
+      except KeyError:
+         pass
 
       # could be expressed as a list comprehension, but I don't want to
       self.strategy = []

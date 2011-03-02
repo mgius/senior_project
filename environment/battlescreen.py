@@ -1,3 +1,4 @@
+import pdb
 import settings
 
 from pygame import Rect
@@ -64,12 +65,13 @@ class Battlefield(Environment):
       # temporary hack
       if character in self.players:
          targets = self.enemies.sprites()
+         pdb.set_trace()
       else:
          targets = self.players.sprites()
       # this should eventually become a part of the players
       for strategem in character.strategy:
          target = strategem.condition.checkCondition(character, targets)
-         if target:
+         if target and strategem.action.canDoAction(character, targets):
             strategem.action.doAction(character, target)
             break
 

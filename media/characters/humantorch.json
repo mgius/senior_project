@@ -8,9 +8,11 @@
   "speed" : 5,
   "weapon" : "firesword",
   "armor" : "ironarmor",
+  "spellbook" : [ "fire" ],
   "strategems" : [ {
                      "action" : 
-                        {"name" : "Attack"},
+                        {"name" : "CastSpell",
+                         "spellname" : "fire"},
                      "condition" : 
                         {"name" : "WeakAgainst",
                          "targetElement" : "fire" }
