@@ -8,7 +8,9 @@
 \textwidth 6in \textheight 8 in
 % That's about enough definitions
 
+\usepackage{setspace}
 \usepackage{url}
+\usepackage{amsmath}
 
 \begin{document}
 \author{Mark Gius\vspace{10pt} \\
@@ -17,7 +19,16 @@
 \title{Senior Project: AutoRPG}
 \maketitle
 
+\begin{abstract}
+Most video games on the market today are geared towards players with fast reflexes and favor quick action over careful planning. This trend has particularly affected the Console Role Playing Game.  Where in the past the pace of the game afforded time to choose an action and select it, newer games progress at a breakneck pace, leading to less direct player interaction and more scripted actions.
+
+I seek to create a game that only allows user interaction via pre-defined character behavior to encourage planning over quick actions.
+\end{abstract}
+
+\doublespacing
 \section{Introduction}
+
+\textbf{This needs to be modified, or the abstract does.}
 
 Most video games on the market today are geared towards players with fast reflexes and favor quick action over careful planning. This trend has particularly affected the Console Role Playing Game.  Where in the past the pace of the game afforded time to choose an action and select it, newer games progress at a breakneck pace, leading to less direct player interaction and more scripted actions.  One such game, Final Fantasy XII, allowed the player to provide sets of actions for their characters to perform automatically in battle in addition to manually entered actions. \cite{Gambits} This preserved a significant amount of tactical planning in the game. A well-designed set of actions could often make the difference between victory and defeat.
 
@@ -44,11 +55,39 @@ A simple prototype game was developed in Python using the PyGame game developmen
 
 \subsection{Frontend}
 
-The frontend largely serves to display the information for the battle.  It serves a secondary purpose of allowing future development to occur on the 
+The frontend largely serves to display the information for the battle.  It serves a secondary purpose of allowing future development to take the project from proof of concept to full fledged game if future developers so desired.
 
 \subsubsection{Block Based Movement}
 
 In most SNES era RPG games, player characters moved about the overworld in discrete steps as though the world was divided into a grid.  A single press of any direction would cause movement until the player was fully contained in the next block created by the grid.  I wanted to recreate this behavior for the simple overworld screen.
+
+The block based movement algorithm implemented has the following characteristics:
+\begin{description}
+   \item[Characters must move in discrete blocks] \hfill \\
+   Movement must begin and end on specific points on a grid.  Characters cannot stop between these points and cannot change direction except on these specific points. 
+   \item[The current direction takes precedence] \hfill \\
+   So long as the direction key corresponding to the current direction continues to be held down, the player will continue walking that direction.  The addition of additional direction keys has no effect on the current directions.
+   \item[The order that directions are pressed matters] \hfill \\
+   If several directions are pressed at the same time, the first one pressed takes precedence.  A player that holds down right, then presses and holds up followed by down, will find their character moving up when right is released.
+\end{description}
+
+This behavior is achieved using a bitset and a queue.  
+
+PyGame contains an event system.  A PyGame library call provides the caller with a queue of events that have occurred since the last call to the event system.  Keyboard presses are processed as events to be handled by the game code.  For every keypress, PyGame generates two events: one when the key is depressed, and one when it is released.  Because PyGame does not track the current state of input devices itself, we must keep track of the current state of the keyboard ourselves.  This is where the bitset is used.  Each direction is assigned a value that can be expressed as a power of two. These values can be stored by using bitwise operators.  For example:
+
+\begin{align*}
+Left = 00000001 \\ 
+Right = 00000100 \\
+Left \land Right = 00000101
+\end{align*}
+
+When keys are depressed, the appropriate number is bitwise ANDed into the bitset.  On key release the inverse of the appropriate number is bitwise ANDed, removing that bit from the set.  By querying the bitset, the set of depressed keys can be returned.
+
+The bitset is useful for determining which keys are currently depressed, but it does not provide any information about the order in which keys were depressed.  To keep track of the ordering of keypresses, The set of keypresses are also recorded in a queue, to preserve the order of the keypresses.  At each frame update, the character sprite is animated and moved around the screen based on its current movement direction.  
+
+When the character reaches a grid intersection point, a new direction must be chosen.  The current direction is used to determine if that key is still depressed. If so, the character continues moving in the same direction.  If not, the queue of directions is used. Each direction in the queue is compared against the current set of depressed keys.  When a direction is found that is still depressed, the character moves in that direction.  The queue is emptied when the character has stopped and all keys have been released.
+
+The implementation for the block based movement can be found in \texttt{character/character.py} in the \texttt{Character} and \texttt{PlayerCharacter} classes.
 
 \subsection{Battle Backend}
 

@@ -80,3 +80,7 @@ Currently no interaction possible.
 * Moving and "attacking" at the same kind causes...interesting results
   * somewhat irrelevant considering that "attack" needs to be removed
     from that context anyway
+* Press and hold right.  Press and release up.  Press and hold down.  Press and
+  hold up.  Release right.  Player walks up, even though down should have
+  precedence
+  * Has to do with not clearing the linked list of pressed directions...doh!
