@@ -1,0 +1,6 @@
+{"name" : "cure",
+ "mpcost" : 3,
+ "lowdmg" : -100,
+ "highdmg" : -40,
+ "elem" : "none"
+}

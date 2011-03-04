@@ -35,12 +35,12 @@ class WeakAgainst(Condition):
       print "DEBUG: No target found for weak against %s" % self.targetElement
       return None
 
-class HealthBelow(Condition):
+class EnemyHealthBelow(Condition):
    def __init__(self, extradata):
       self.threshold = extradata['hpThreshold']
 
    def __repr__(self):
-      return "Target Health Below %d" % self.threshold
+      return "Enemy Health Below %d" % self.threshold
 
    def checkCondition(self, attacker, defenders):
       for defender in defenders:
@@ -49,3 +49,14 @@ class HealthBelow(Condition):
 
       return None
 
+class PlayerHealthBelow(Condition):
+   def __init__(self, extradata):
+      self.threshold = extradata['hpThreshold']
+
+   def __repr__(self):
+      return "Player Health Below %d" % self.threshold
+
+   def checkCondition(self, attacker, defenders):
+      if attacker.hp < self.threshold:
+         return attacker
+      return None

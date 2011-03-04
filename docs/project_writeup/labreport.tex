@@ -19,8 +19,11 @@
 \title{Senior Project: AutoRPG}
 \maketitle
 
+%TODO: Why + What + What happened
 \begin{abstract}
 Most video games on the market today are geared towards players with fast reflexes and favor quick action over careful planning. This trend has particularly affected the Console Role Playing Game.  Where in the past the pace of the game afforded time to choose an action and select it, newer games progress at a breakneck pace, leading to less direct player interaction and more scripted actions.
+
+I sought to create a game that would 
 
 I seek to create a game that only allows user interaction via pre-defined character behavior to encourage planning over quick actions.
 \end{abstract}
@@ -33,6 +36,8 @@ I seek to create a game that only allows user interaction via pre-defined charac
 Most video games on the market today are geared towards players with fast reflexes and favor quick action over careful planning. This trend has particularly affected the Console Role Playing Game.  Where in the past the pace of the game afforded time to choose an action and select it, newer games progress at a breakneck pace, leading to less direct player interaction and more scripted actions.  One such game, Final Fantasy XII, allowed the player to provide sets of actions for their characters to perform automatically in battle in addition to manually entered actions. \cite{Gambits} This preserved a significant amount of tactical planning in the game. A well-designed set of actions could often make the difference between victory and defeat.
 
 A game that only allowed battle actions through pre-defined character tactics would force the player to think deeply about their opponents and characters in order to develop a winning strategy. 
+
+A secondary goal of the project was to provide the ability to quickly and painlessly add new game assets in a human readable way.
 
 \section{Previous Work/Related Work}
 
@@ -73,12 +78,14 @@ The block based movement algorithm implemented has the following characteristics
 
 This behavior is achieved using a bitset and a queue.  
 
-PyGame contains an event system.  A PyGame library call provides the caller with a queue of events that have occurred since the last call to the event system.  Keyboard presses are processed as events to be handled by the game code.  For every keypress, PyGame generates two events: one when the key is depressed, and one when it is released.  Because PyGame does not track the current state of input devices itself, we must keep track of the current state of the keyboard ourselves.  This is where the bitset is used.  Each direction is assigned a value that can be expressed as a power of two. These values can be stored by using bitwise operators.  For example:
+PyGame contains an event system for tracking input events from a keyboard, mouse or joystick.  A PyGame library call provides the caller with a queue of events that have occurred since the last call to the event system.  Keyboard presses are processed as events to be handled by the game code.  For every keypress, PyGame generates two events: one when the key is depressed, and one when it is released.  Because PyGame does not track the current state of input devices itself, we must keep track of the current state of the keyboard ourselves.  This is where the bitset is used.  Each direction is assigned a value that can be expressed as a power of two. These values can be stored by using bitwise operators.  For example:
 
 \begin{align*}
 Left = 00000001 \\ 
 Right = 00000100 \\
-Left \land Right = 00000101
+Left \land Right = 00000101 \\
+Left \land Right \land \neg Right = 00000001 \\
+None = 00000000
 \end{align*}
 
 When keys are depressed, the appropriate number is bitwise ANDed into the bitset.  On key release the inverse of the appropriate number is bitwise ANDed, removing that bit from the set.  By querying the bitset, the set of depressed keys can be returned.
@@ -87,9 +94,95 @@ The bitset is useful for determining which keys are currently depressed, but it 
 
 When the character reaches a grid intersection point, a new direction must be chosen.  The current direction is used to determine if that key is still depressed. If so, the character continues moving in the same direction.  If not, the queue of directions is used. Each direction in the queue is compared against the current set of depressed keys.  When a direction is found that is still depressed, the character moves in that direction.  The queue is emptied when the character has stopped and all keys have been released.
 
-The implementation for the block based movement can be found in \texttt{character/character.py} in the \texttt{Character} and \texttt{PlayerCharacter} classes.
+The implementation for block based movement can be found in \texttt{character/character.py} in the \texttt{Character} and \texttt{PlayerCharacter} classes.
+
+\subsubsection{Animations}
+
+PyGame has no native support for animated characters, so I had to develop my own.  Animations are implemented as a circularly linked list, where each element in the list represents a single frame of the animation.  The linked list itself has no notion of display frames vs animations frames.  It simply responds to requests for ``next frame in the animation.''  Python has a native implementation of a circularly linked list\footnote{The \texttt{cycle} class in the \texttt{itertools} module}, but it lacks the important ability to reset the list back to the beginning of the cycle.  At this time, most of the animations are simple two-frame walking animations, but I wanted to support more complex animations as well.  In order to support longer animations, the frontend code needed to be able to reset the animation back to the ``start'' to ensure that the animation will begin where expected.  Due to this weakness, I reimplemented the native Python cycle based upon their specification in the Python documentation \cite{PythonCycle} and added a reset function to restore the cycle to it's original state. 
+
+Currently all animations are progressed at a rate of three frames per second.  This framerate could be easily modified or abstracted out so that different animations progress at different rates.  This would require a certain amount of overhead to implement an Animation Class that would contain information about the frames of the animation and the rate at which frames should be cycled. 
+
+The implementation for the resettable cycle can be found in \texttt{shared/cycle.py} in the \texttt{Cycle} class. 
 
 \subsection{Battle Backend}
+
+Underneath the visual layer is a simple turn based RPG system.  Battleable characters have attributes such as hit points and equipment that define how they fare in battle.  Characters can interact with each other using their equipment or magic spells.  Characters also contain attributes that help the GUI frontend, such as animation and location data.
+
+\subsubsection{Data Loading}
+
+One of the secondary goals of the project was to be able to quickly add game assets in a human readable way.  In accordance with this goal, almost every aspect of a character can be expressed and stored as human readable json objects on the file system.  Several other container formats were considered, including XML and Pythons native ``configuration'' format.  JSON \cite{JSON} was chosen primarily for its simplicity and human readability.  It is much easier to read and write by hand than XML while still being able to contain the same information.  A side benefit of using JSON is its similarity to Python dictionary notation.  A JSON object can be interpreted wihout modification by the Python interpreter as a Python dictionary object, making the syntax even more friendly for Python developers hoping to extend the project.  Python also features a simple JSON library that simplifies reading and writing to and from JSON data.
+
+All loading of configurable data, like Characters and their Equipment, is done via a set of load functions that can be found in the \texttt{shared.load} module. This module centralizes disk read activity so that the code in other modules does not need to have awareness of where files are located or the format of the stored data.  Because all code in the project expects that these load functions return dictionary values the underlying data type can be changed in the future if desired, so long as the load functions continue to return dictionaries.
+
+After the data is read off of the disk, a particular class will use the information contained within to populate its attributes for use within the game.  For example, the following code is executed every time a player is instantiated:
+
+\singlespacing
+\samepage{
+\begin{verbatim}
+def load_player(name, center=None):
+   jsonData = load_character_data(name)
+   return globals()[jsonData['charactertype']](jsonData, center)
+
+class BattleablePlayerCharacter(PlayerCharacter, BattleableCharacter):
+   def __init__(self, jsonData, center=None):
+      displayname = jsonData['charactername']
+      spritename = jsonData['spritename']
+
+      PlayerCharacter.__init__(self, spritename, displayname, center)
+      BattleableCharacter.__init__(self, jsonData)
+\end{verbatim}
+}
+\doublespacing
+
+Not all aspects of this code will be explained in full.  Interested parties may find the official Python Documentation \cite{PyDocs} very helpful, especially the sections on Python classes.
+
+Code wishing to load a character from disk would call the load\_player function with a string argument containing the name of the character to load.  load\_player then loads the JSON data corresponding to that character from the disk.  There can be multiple types of players, ranging from Non Player Characters to Groups of characters represented by a single in-game sprite.  The second line of load\_player should be broken down a little bit.  
+
+\texttt{globals()} is a Python function that returns a dictionary of the current scopes global variables. Contained in that dictionary, among other things, is a mapping from the string ``BattleablePlayerCharacter'' to the Class object for the BattleablePlayerCharacter class.  The player we have just loaded happens to be a BattleablePlayerCharacter, so the ``charactertype'' attribute in the JSON data contains the string ``BattleablePlayerCharacter.'' Once the Class object has been retrieved, we can call the constructor for that class on it, passing in the retrieved JSON data and an optional location in the world to place the character. 
+
+Within BattleablePlayerCharacter, two attributes are retrieved from the JSON dictionary, and then the initialization function for the two classes that BattleablePlayerCharacter inherits from are executed.  PlayerCharacter primarily sets up display attributes such as the animation frames and sets up keyboard input rules for that character.  BattleableCharacter initializes all of the attributes used by the battle system, such as equipment and hit points.
+
+The instantiated BattleablePlayerCharacter object is now ready to be used in battle and controlled by the player in the overworld.
+
+Code for the \texttt{PlayerCharacter} and \texttt{BattleableCharacter} classes can be found in the \texttt{character.character} module.
+
+\subsubsection{Strategems}
+
+The battle action in AutoRPG is controlled by a given characters Strategy.  A Strategy is composed of one or more Strategems.  A Strategem is composed of a single Action and Condition.
+
+Actions are, well, actions that a character can perform in battle.  Example actions include attacking with an equipped weapon or casting a magic spell.  Actions are mostly predefined in Python code.  
+
+\singlespacing
+\samepage{
+\begin{verbatim}
+class CastSpell(Action):
+   def __init__(self, extradata):
+      self.spellname = extradata['spellname']
+      self.spell = None
+      self.lastAttacker = None
+
+   def canDoAction(self, attacker, defender):
+      if self.lastAttacker is not attacker or self.spell is None:
+         self.spell = None
+         for spell in attacker.spellbook:
+            if spell.name == self.spellname:
+               self.spell = spell
+               break
+         if self.spell is None:
+            return False
+      return attacker.curmp >= self.spell.mpcost
+
+   def doAction(self, attacker, defender):
+      damage = self.spell.getDamage()
+      if element.isWeak(self.spell.elem, defender.armor.elem):
+         damage *= 2
+      defender.curhp -= damage
+      attacker.curmp -= self.spell.mpcost
+\end{verbatim}
+}
+\doublespacing
+
+Most of the action in the battle system is driven by the StrateeCondition and Action system. 
 
 The battle backend serves primarily as a stimuli-response system.  Characters take turns deciding a course of action and performing that action.  All possible actions are predefined as Python Classes.  Actions include a simple Attack or Spells.  Armor can be used to reduce damage from weapons, and elemental attributes can be used to reduce or increase the potential damage.  
 
