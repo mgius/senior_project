@@ -148,7 +148,36 @@ Code for the \texttt{PlayerCharacter} and \texttt{BattleableCharacter} classes c
 
 \subsubsection{Strategems}
 
-The battle action in AutoRPG is controlled by a given characters Strategy.  A Strategy is composed of one or more Strategems.  A Strategem is composed of a single Action and Condition.
+The battle action in AutoRPG is controlled by a given characters Strategy.  A Strategy is composed of one or more Strategems.  A Strategem is composed of a single Condition and Action.
+
+Most of the code related to the Strategem system can be found in the \texttt{strategem} module.  The driver for the Strategem system can be found in the \texttt{environment.battlescreen} module, in the \texttt{BattleField} class's \texttt{update} method.
+
+\paragraph{Conditions} \hfill % force header-ish formatting
+
+Conditions define under what circumstances an associated Action should be executed. A Condition definition is relatively simple.  
+
+\singlespacing
+\samepage{
+\begin{verbatim}
+class EnemyHealthBelow(Condition):
+   def __init__(self, extradata):
+      self.threshold = extradata['hpThreshold']
+
+   def checkCondition(self, attacker, defenders):
+      for defender in defenders:
+         if defender.hp < self.threshold:
+            return defender
+
+      return None
+\end{verbatim}
+}
+\doublespacing
+
+Each condition contains a single method, \texttt{checkCondition}, that returns either a character to be targeted or a \texttt{None} object, signifying that no target was acceptable and the next Strategy should be evaluated.
+
+This Condition will trigger when one of the opponents' health reserves has dropped below a particular point.  The condition iterates through each potential defender (provided by the Strategem driver) until it finds an attacker that meets the threshold defined by the attacker's Strategem configuration.
+
+\paragraph{Actions} \hfill % force header-ish formatting
 
 Actions are, well, actions that a character can perform in battle.  Example actions include attacking with an equipped weapon or casting a magic spell.  Actions are mostly predefined in Python code.  
 
@@ -182,17 +211,27 @@ class CastSpell(Action):
 }
 \doublespacing
 
-Most of the action in the battle system is driven by the StrateeCondition and Action system. 
+This Action casts a spell on a target chosen by the associated Condition.  However, it is not enough that a Condition declares a particular target viable.  The player must be capable of taking that action. In this spell casting Action, the player must have sufficient magic point reserves in order to cast their spell.  The \texttt{canDoAction} function determines if an action can be taken, returning True or False to the driver.  A False return will cause the driver to evaluate continue on to the next Strategem in the list.  A True return will cause the driver to initiate the Action.
 
-The battle backend serves primarily as a stimuli-response system.  Characters take turns deciding a course of action and performing that action.  All possible actions are predefined as Python Classes.  Actions include a simple Attack or Spells.  Armor can be used to reduce damage from weapons, and elemental attributes can be used to reduce or increase the potential damage.  
+Assuming the Condition matches and the Action can be taken, the \texttt{doAction} function is executed.  This function causes whatever effect the Action may cause, in this case dealing damage to the defender and reducing the magic point reserves by the appropriate amount.  
 
-Conditions are somewhat more flexible.  In theory, any attribute of a player or enemy can be examined to determine whether an action should be taken.  These can be as simple as choosing the enemy with the least hit points remaining to complicated queries designed to strike the enemy most likely to cause the most damage.
+\paragraph{Strategem Driver} \hfill
 
-%(a) Overview of Solution. Describe in broad terms your project and solution
-%(b) Main Algorithm or Interesting Details. Either describe the main algorithm in your project or if appropriate, Pick some of the key areas of your project that you are particularly proud of (that were either complex or tricky or just the most interesting to you). Describe in detail your solution to these aspects of your overall problem. Think about someone else trying to implement what you just did, what information would be most useful for them?
+The driver for the Strategem system is currently very simple, and largely conforms to the behavior specified above.  
+
+\singlespacing
+\samepage{
+\begin{verbatim}
+for strategem in character.strategy:
+   target = strategem.condition.checkCondition(character, targets)
+   if target and strategem.action.canDoAction(character, targets):
+      strategem.action.doAction(character, target)
+      break
+\end{verbatim}
+}
+\doublespacing
 
 \section{Results} 
-%Describe your results. Please include at least 3-6 screen shots of your results, which highlight the capabilities of your project.
 
 \section{Future Work}
 
@@ -201,8 +240,6 @@ Future endeavors should probably be directed towards modifying existing games, r
 Once the backend has been put in place, competitions could be formed around the system, such as those often associated with RoboCode.  Player vs Player would be tricky to set up.  Player vs. Computer situations would be much easier to establish and regulate.  Categories such as least moves to win against pregenerated opponents would have people optimizing their strategies well. 
 
 If the prototype implementation were to be improved in some manner, the best way forward would be to make the combat more complex so that more complex strategies could be built around it.  Ideas for expansion would involve multiple characters on the player team, the ability to target multiple combatants with abilities, and strategies that can choose targets based on these additions. More complex equipment loadouts and damage potential could also lead to to more complex strategy possibilities.
-
-%What is the next stage? What didn't you get done that you should have? Now that you're done, what should the next person do to carry on the project? Frequently senior projects are a portion of a larger project, and you have to make sure that your work is understandable by the next person to work on the project.
 
 \section{Appendices}
 
