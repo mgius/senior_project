@@ -21,8 +21,6 @@ pygame.init()
 
 screen = pygame.display.set_mode(settings.totalsize)
 
-background = load_tile('green_grey.gif')
-
 man = load_player("humantorch", center=(32 * 10 + 16, 32 * 10 + 16))
 
 clock = pygame.time.Clock()
@@ -40,7 +38,7 @@ def processEvents():
             sys.exit(0)
       overworld.processEvent(event)
 
-testOverworldFile = open("media/maps/testArena.json")
+testOverworldFile = open("media/maps/printArena.json")
 jsonData = json.load(testOverworldFile)
 
 overworld = Overworld.fromJson(jsonData, man)
@@ -61,7 +59,7 @@ while 1:
       except StopIteration:
          battleAnim = None
          isBattle = True
-         battleScreen = Battlefield("red_silver.gif", rpgevent.player, rpgevent.opponents)
+         battleScreen = Battlefield("white.gif", rpgevent.player, rpgevent.opponents)
 
    elif isBattle:
       status = battleScreen.update()

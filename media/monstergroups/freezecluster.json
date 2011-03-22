@@ -1,5 +1,5 @@
 { "monstertype" : "BattleableNonPlayerCharacterGroup",
   "displayname" : "Mr Freeze Cluster",
-  "spritename" : "ftr1",
-  "members" : [ "mrfreeze", "imp", "mrfreeze", "mrfreeze" ] 
+  "spritename" : "zph1",
+  "members" : [ "mrfreeze", "mrfreeze", "mrfreeze", "mrfreeze" ] 
 }
